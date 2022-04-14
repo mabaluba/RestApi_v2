@@ -30,8 +30,6 @@ namespace DataAccess.EntityRepositories
         {
             _ = lecture ?? throw new ArgumentNullException(nameof(lecture));
 
-            var teacher = _context.Teachers?.FirstOrDefault(i => i.Id == lecture.TeacherId) ?? throw new NullReferenceException();
-
             var lectureDb = new LectureDb()
             {
                 Topic = lecture.Topic,
@@ -52,7 +50,34 @@ namespace DataAccess.EntityRepositories
                 throw;
             }
 
-            return _mapper.Map<Lecture>(result?.Entity);
+            return _mapper.Map<Lecture>(result.Entity);
+        }
+
+        public async Task<ILecture> CreateEntityAsync(ILecture lecture)
+        {
+            _ = lecture ?? throw new ArgumentNullException(nameof(lecture));
+
+            EntityEntry<LectureDb> result;
+            try
+            {
+                var lectureDb = new LectureDb()
+                {
+                    Topic = lecture.Topic,
+                    Date = lecture.Date,
+                    TeacherId = lecture.TeacherId
+                };
+
+                result = await _context.Lectures.AddAsync(lectureDb);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation($"Saved member with id = {lectureDb.Id} to database.");
+            }
+            catch (DbUpdateException exception)
+            {
+                _logger.LogError(exception, exception.Message);
+                throw;
+            }
+
+            return _mapper.Map<Lecture>(result.Entity);
         }
 
         public ILecture EditEntity(ILecture lecture)
@@ -112,11 +137,6 @@ namespace DataAccess.EntityRepositories
 
             _logger.LogInformation($"Get member with id = {lectureId} from database.");
             return _mapper.Map<Lecture>(lectureDb);
-        }
-
-        public Task<ILecture> CreateEntityAsync(ILecture attendance)
-        {
-            throw new NotImplementedException();
         }
 
         public Task DeleteEntityAsync(int attendanceId)
