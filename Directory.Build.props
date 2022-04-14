@@ -1,0 +1,12 @@
+<Project>
+    <PropertyGroup>
+        <LangVersion>Latest</LangVersion>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Release' ">
+        <WarningsNotAsErrors>S1121,CS0121</WarningsNotAsErrors>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+</Project>  

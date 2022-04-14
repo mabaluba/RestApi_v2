@@ -1,0 +1,5 @@
+<Project>
+    <Target Name="Apply Formating to Projects" BeforeTargets="BeforeBuild" Condition="'$(Configuration)' == 'Release' ">
+        <!--<Exec Command="dotnet format $(MSBuildProjectFile)" Condition="'$(MSBuildProjectExtension)' == '.csproj'"/>-->
+    </Target>
+</Project>
