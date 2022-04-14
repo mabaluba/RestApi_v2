@@ -124,8 +124,7 @@ namespace DataAccess.EntityRepositories
             var attendanceDb = await _context.Attendances
                 ?.Include(i => i.Lecture)
                 ?.Include(j => j.Student)
-                .Where(i => i.Id == attendance.Id)
-                .FirstOrDefaultAsync()
+                .FirstOrDefaultAsync(i => i.Id == attendance.Id)
                 ?? throw new MissingMemberException($"Cannot find member with Id = {attendance.Id}.");
 
             attendanceDb.LectureId = lecture.Id;

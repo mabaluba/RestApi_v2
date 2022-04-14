@@ -9,7 +9,7 @@ namespace Banch
     {
         // private readonly AttendanceControllerIntegrationTests _a = new();
         //
-        // [Params(1, 5)]
+        // [Params(10)]
         // public static int IterationCount { get; set; }
         //
         [Benchmark]
@@ -18,9 +18,13 @@ namespace Banch
             // for (int i = 0; i < IterationCount; i++)
             // {
                 AttendanceControllerIntegrationTests a = new();
-                await a.CreateAttendanceAsync_GivenValidAttendanceDtoModel_ResponseOk();
+
+                // await a.CreateAttendanceAsync_GivenValidAttendanceDtoModel_ResponseOk();
+                //
+                await a.EditAttendanceAsync_GivenValidInfo_ResponseOk("15");
 
             // }
+            //
         }
     }
 }

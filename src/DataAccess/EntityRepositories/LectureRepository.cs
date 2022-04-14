@@ -30,6 +30,8 @@ namespace DataAccess.EntityRepositories
         {
             _ = lecture ?? throw new ArgumentNullException(nameof(lecture));
 
+            _ = _context.Teachers?.Find(lecture.TeacherId) ?? throw new MissingMemberException($"There is no Teacher with Id = {lecture.TeacherId} in database.");
+
             var lectureDb = new LectureDb()
             {
                 Topic = lecture.Topic,
@@ -56,6 +58,8 @@ namespace DataAccess.EntityRepositories
         public async Task<ILecture> CreateEntityAsync(ILecture lecture)
         {
             _ = lecture ?? throw new ArgumentNullException(nameof(lecture));
+
+            _ = await _context.Teachers.FindAsync(lecture.TeacherId);
 
             EntityEntry<LectureDb> result;
             try
@@ -85,6 +89,34 @@ namespace DataAccess.EntityRepositories
             var lectureDb = _context.Lectures?.Find(lecture.Id)
                 ?? throw new MissingMemberException($"Cannot find member with Id = {lecture.Id}.");
 
+            var teacher = _context.Teachers?.FirstOrDefault(i => i.Id == lecture.TeacherId) ?? throw new NullReferenceException();
+
+            lectureDb.Topic = lecture.Topic;
+            lectureDb.Date = lecture.Date;
+            lectureDb.TeacherId = lecture.TeacherId;
+            try
+            {
+                _context.Update(lectureDb);
+                _context.SaveChanges();
+                _logger.LogInformation($"Saved changes for member with id = {lectureDb.Id} to database.");
+            }
+            catch (Exception exception) when (exception is InvalidOperationException || exception is DbUpdateException)
+            {
+                _logger.LogError(exception, exception.Message);
+                throw;
+            }
+
+            return _mapper.Map<Lecture>(lectureDb);
+        }
+
+        public async Task<ILecture> EditEntityAsync(ILecture lecture)
+        {
+            var lectureDb = await _context.Lectures.FindAsync(lecture.Id)
+                ?? throw new MissingMemberException($"Cannot find member with Id = {lecture.Id}.");
+
+            // var lectFind = await _context.Lectures
+            //    .Include(i => i.Teacher)
+            //    .FirstOrDefaultAsync(i => i.Teacher.Id == lecture.TeacherId);
             var teacher = _context.Teachers?.FirstOrDefault(i => i.Id == lecture.TeacherId) ?? throw new NullReferenceException();
 
             lectureDb.Topic = lecture.Topic;
@@ -145,11 +177,6 @@ namespace DataAccess.EntityRepositories
         }
 
         public Task<ILecture> GetEntityAsync(int attendanceId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ILecture> EditEntityAsync(ILecture attendance)
         {
             throw new NotImplementedException();
         }

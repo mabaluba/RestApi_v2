@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using M10_RestApi.ModelsDto;
 using Microsoft.AspNetCore.Mvc.Testing;
 using NUnit.Framework;
@@ -135,7 +136,7 @@ namespace M10_RestApi.Tests.IntegrationTests
         }
 
         [Test]
-        public void CreateLecture_GivenNotValidTeacherId_ResponseNotFound()
+        public async Task CreateLecture_GivenNotValidTeacherId_ResponseNotFound()
         {
             // Arrange
             var lecture = new LecturePostDto
@@ -149,7 +150,7 @@ namespace M10_RestApi.Tests.IntegrationTests
             var content = new StringContent(lectureDto, Encoding.UTF8, "application/json");
 
             // Act
-            var response = _client.PostAsync("", content).Result;
+            var response = await _client.PostAsync("", content);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));

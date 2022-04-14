@@ -12,11 +12,11 @@ namespace DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<LectureDb>()
-                .HasOne<TeacherDb>()
-                .WithMany()
-                .HasForeignKey(l => l.TeacherId);
-
+            // modelBuilder.Entity<LectureDb>()
+            //    .HasOne<TeacherDb>()
+            //    .WithMany()
+            //    .HasForeignKey(l => l.TeacherId);
+            //
             modelBuilder.Entity<AttendanceDb>()
                 .HasIndex(a => new { a.LectureId, a.StudentId }).IsUnique();
 

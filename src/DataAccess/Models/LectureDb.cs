@@ -10,6 +10,8 @@ namespace DataAccess.Models
 
         public DateTime Date { get; set; }
 
+        public TeacherDb Teacher { get; set; }
+
         public int TeacherId { get; set; }
     }
 }
