@@ -54,15 +54,27 @@ namespace M10_RestApi.Controllers
             return Created($"/api/education/lecture/{lecture.Id}", lecture);
         }
 
+        //[HttpPut("{id}")]
+        //public ActionResult EditLecture(int id, LectureDto lecture)
+        //{
+        //    if (id != lecture.Id)
+        //    {
+        //        return BadRequest($"Requested Id = {id}, but given Id = {lecture.Id}");
+        //    }
+
+        //    var newLecture = _entityService.EditEntity(_mapper.Map<Lecture>(lecture));
+        //    return Ok($"/api/education/lecture/{newLecture.Id}");
+        //}
+        //
         [HttpPut("{id}")]
-        public ActionResult EditLecture(int id, LectureDto lecture)
+        public async Task<ActionResult> EditLectureAsync(int id, LectureDto lecture)
         {
             if (id != lecture.Id)
             {
                 return BadRequest($"Requested Id = {id}, but given Id = {lecture.Id}");
             }
 
-            var newLecture = _entityService.EditEntity(_mapper.Map<Lecture>(lecture));
+            var newLecture = await _entityServiceAsync.EditEntityAsync(_mapper.Map<Lecture>(lecture));
             return Ok($"/api/education/lecture/{newLecture.Id}");
         }
 
