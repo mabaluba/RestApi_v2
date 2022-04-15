@@ -17,6 +17,9 @@ namespace DataAccess
             //    .WithMany()
             //    .HasForeignKey(l => l.TeacherId);
             //
+            modelBuilder.Entity<LectureDb>()
+                .HasIndex(l => l.Topic).IsUnique();
+
             modelBuilder.Entity<AttendanceDb>()
                 .HasIndex(a => new { a.LectureId, a.StudentId }).IsUnique();
 
