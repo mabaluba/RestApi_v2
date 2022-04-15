@@ -94,7 +94,7 @@ namespace M10_RestApi.Tests.IntegrationTests
         }
 
         [Test]
-        public void CreateLecture_GivenValidLectureDtoModel_ResponseOk()
+        public async Task CreateLecture_GivenValidLectureDtoModel_ResponseOk()
         {
             // Arrange
             var lecture = new LecturePostDto
@@ -108,14 +108,14 @@ namespace M10_RestApi.Tests.IntegrationTests
             var content = new StringContent(lectureDto, Encoding.UTF8, "application/json");
 
             // Act
-            var response = _client.PostAsync("", content).Result;
+            var response = await _client.PostAsync("", content);
 
             // Assert
             response.EnsureSuccessStatusCode();
         }
 
         [Test]
-        public void CreateLecture_GivenNotValidLectureDtoModel_ResponseBadRequest()
+        public async Task CreateLecture_GivenNotValidLectureDtoModel_ResponseBadRequest()
         {
             // Arrange
             var lecture = new LecturePostDto
@@ -129,7 +129,7 @@ namespace M10_RestApi.Tests.IntegrationTests
             var content = new StringContent(lectureDto, Encoding.UTF8, "application/json");
 
             // Act
-            var response = _client.PostAsync("", content).Result;
+            var response = await _client.PostAsync("", content);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
