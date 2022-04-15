@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using BusinessLogic.DomainEntityValidation;
 using BusinessLogic.EntityServices;
 using EducationDomain.DomainEntites;
@@ -13,12 +14,14 @@ namespace BusinessLogic.Tests
     public class LectureServiceTests
     {
         private IEntityRepository<ILecture> _repositoryService;
+        private IEntityRepositoryAsync<ILecture> _repositoryServiceAsync;
         private IEntityValidation _validation;
 
         [OneTimeSetUp]
         public void Setup()
         {
             _repositoryService = new Mock<IEntityRepository<ILecture>>().Object;
+            _repositoryServiceAsync = new Mock<IEntityRepositoryAsync<ILecture>>().Object;
             _validation = new Mock<IEntityValidation>().Object;
         }
 
@@ -30,11 +33,11 @@ namespace BusinessLogic.Tests
         }
 
         [Test]
-        public void CreateAndEditEntity_GivenNullAttendence_ThrowArgumentNullException()
+        public void CreateAndEditEntity_GivenNull_ThrowArgumentNullException()
         {
             // Arrange
             Lecture lecture = null;
-            LectureService service = new(_repositoryService, _validation);
+            LectureService service = new(_repositoryService, _repositoryServiceAsync, _validation);
 
             // Act
             Action createWithNull = () => service.CreateEntity(lecture);
@@ -52,13 +55,15 @@ namespace BusinessLogic.Tests
         public void AttendanceEntity_GivenNullArgs_ThrowArgumentNullException()
         {
             // Act
-            Action repositoryNull = () => new LectureService(null, _validation);
-            Action validationNull = () => new LectureService(_repositoryService, null);
+            Action repositoryNull = () => new LectureService(null, _repositoryServiceAsync, _validation);
+            Action repositoryAsyncNull = () => new LectureService(_repositoryService, null, _validation);
+            Action validationNull = () => new LectureService(_repositoryService, _repositoryServiceAsync, null);
 
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.That(repositoryNull, Throws.Exception.TypeOf<ArgumentNullException>());
+                Assert.That(repositoryAsyncNull, Throws.Exception.TypeOf<ArgumentNullException>());
                 Assert.That(validationNull, Throws.Exception.TypeOf<ArgumentNullException>());
             });
         }
