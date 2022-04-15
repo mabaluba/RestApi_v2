@@ -47,16 +47,20 @@ namespace BusinessLogic.EntityServices
             return _repository.EditEntity(entity);
         }
 
+        public async Task<ILecture> EditEntityAsync(ILecture entity)
+        {
+            _ = entity ?? throw new ArgumentNullException(nameof(entity));
+
+            _validation.Validate(entity);
+
+            return await _repositoryAsync.EditEntityAsync(entity);
+        }
+
         public IReadOnlyCollection<ILecture> GetAllEntities() => _repository.GetAllEntities();
 
         public ILecture GetEntity(int entityId) => _repository.GetEntity(entityId);
 
         public void DeleteEntity(int entityId) => _repository.DeleteEntity(entityId);
-
-        public Task<ILecture> EditEntityAsync(ILecture entity)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task DeleteEntityAsync(int entityId)
         {
