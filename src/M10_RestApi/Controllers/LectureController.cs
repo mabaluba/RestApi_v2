@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
+using BusinessLogic.EntityServices;
 using EducationDomain.DomainEntites;
 using EducationDomain.EntityInterfaces;
 using EducationDomain.ServiceInterfaces;
@@ -14,12 +16,14 @@ namespace M10_RestApi.Controllers
     public class LectureController : ControllerBase
     {
         private readonly IEntityService<ILecture> _entityService;
+        private readonly IEntityServiceAsync<ILecture> _entityServiceAsync;
         private readonly IMapper _mapper;
 
-        public LectureController(IMapper mapper, IEntityService<ILecture> entityService)
+        public LectureController(IMapper mapper, IEntityService<ILecture> entityService, IEntityServiceAsync<ILecture> entityServiceAsync)
         {
             _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
             _entityService = entityService ?? throw new System.ArgumentNullException(nameof(entityService));
+            _entityServiceAsync = entityServiceAsync ?? throw new System.ArgumentNullException(nameof(entityServiceAsync));
         }
 
         [HttpGet("{id}")]
@@ -36,11 +40,18 @@ namespace M10_RestApi.Controllers
             return result.Length == 0 ? NotFound($"Lectures not found.") : result;
         }
 
+        // [HttpPost]
+        // public ActionResult CreateLecture(LecturePostDto newLecture)
+        // {
+        //    var lecture = _entityService.CreateEntity(_mapper.Map<Lecture>(newLecture));
+        //    return Ok($"/api/education/lecture/{lecture.Id}");
+        // }
+        //
         [HttpPost]
-        public ActionResult CreateLecture(LecturePostDto newLecture)
+        public async Task<ActionResult> CreateLectureAsync(LecturePostDto newLecture)
         {
-            var lecture = _entityService.CreateEntity(_mapper.Map<Lecture>(newLecture));
-            return Ok($"/api/education/lecture/{lecture.Id}");
+            var lecture = await _entityServiceAsync.CreateEntityAsync(_mapper.Map<Lecture>(newLecture));
+            return Created($"/api/education/lecture/{lecture.Id}", lecture);
         }
 
         [HttpPut("{id}")]
