@@ -338,6 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
-/src/M10/Banch/Banch.csproj
-/src/M10/Banch/Program.cs
-/src/M10/Banch/Bench1.cs
+/src/Banch/Banch.csproj
+/src/Banch/Program.cs
+/src/Banch/Bench1.cs
