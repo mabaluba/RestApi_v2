@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using BusinessLogic.EntityServices;
 using EducationDomain.DomainEntites;
+using EducationDomain.EntityInterfaces;
 
 // using EducationDomain.EntityInterfaces;
 // using EducationDomain.ServiceInterfaces;
@@ -18,14 +19,14 @@ namespace M10_RestApi.Controllers
     public class AttendanceController : ControllerBase
     {
         // private readonly IEntityService<IAttendance> _entityService;
-        private readonly IAttendanceServiceAsync _entityServiceAsync;
+        private readonly IEntityServiceAsync<IAttendance> _entityServiceAsync;
         private readonly IMapper _mapper;
 
         public AttendanceController(
             IMapper mapper,
 
             // IEntityService<IAttendance> entityService,
-            IAttendanceServiceAsync entityServiceAsync)
+            IEntityServiceAsync<IAttendance> entityServiceAsync)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 

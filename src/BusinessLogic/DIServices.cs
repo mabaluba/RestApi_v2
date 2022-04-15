@@ -17,9 +17,10 @@ namespace BusinessLogic
                 .AddScoped<IEntityService<ITeacher>, TeacherService>()
                 .AddScoped<IEntityService<ILecture>, LectureService>()
                 .AddScoped<IEntityService<IAttendance>, AttendanceService>()
+                .AddScoped<IEntityServiceAsync<IAttendance>, AttendanceService>()
+                .AddScoped<IEntityServiceAsync<ILecture>, LectureService>()
                 .AddScoped<IAverageGradeService<IAverageGrade>, AverageGradeService>()
                 .AddScoped<IAttandanceReportService<IAttendance>, AttendanceReportService>()
-                .AddScoped<IAttendanceServiceAsync, AttendanceService>()
                 .AddScoped<IControlService, ControlService>()
                 .AddScoped<IEntityValidation, EntityValidation>()
                 ;

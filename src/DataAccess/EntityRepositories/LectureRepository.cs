@@ -30,7 +30,7 @@ namespace DataAccess.EntityRepositories
         {
             _ = lecture ?? throw new ArgumentNullException(nameof(lecture));
 
-            _ = _context.Teachers?.Find(lecture.TeacherId) ?? throw new MissingMemberException($"There is no Teacher with Id = {lecture.TeacherId} in database.");
+            _ = _context.Teachers?.Find(lecture.TeacherId) ?? throw new MissingMemberException($"Cannot find Teacher with Id = {lecture.TeacherId} in database.");
 
             var lectureDb = new LectureDb()
             {
@@ -59,7 +59,7 @@ namespace DataAccess.EntityRepositories
         {
             _ = lecture ?? throw new ArgumentNullException(nameof(lecture));
 
-            _ = await _context.Teachers.FindAsync(lecture.TeacherId);
+            _ = await _context.Teachers.FindAsync(lecture.TeacherId) ?? throw new MissingMemberException($"Cannot find Teacher with Id = {lecture.TeacherId}.");
 
             EntityEntry<LectureDb> result;
             try

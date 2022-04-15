@@ -8,7 +8,7 @@ using EducationDomain.ServiceInterfaces;
 
 namespace BusinessLogic.EntityServices
 {
-    public class AttendanceService : IEntityService<IAttendance>, IAttendanceServiceAsync
+    public class AttendanceService : IEntityService<IAttendance>, IEntityServiceAsync<IAttendance>
     {
         private readonly IEntityRepository<IAttendance> _repositoryAttendance;
         private readonly IEntityRepositoryAsync<IAttendance> _repositoryAttendanceAsync;
