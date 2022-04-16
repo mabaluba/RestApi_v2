@@ -53,11 +53,11 @@ namespace M10_RestApi.Controllers
         }
 
         [HttpGet("attendances")]
-        public async Task<ActionResult<IReadOnlyCollection<AttendanceDto>>> GetAttendancesAsync()
+        public async Task<ActionResult<IEnumerable<AttendanceDto>>> GetAttendancesAsync()
         {
             var collection = await _entityServiceAsync.GetAllEntitiesAsync();
 
-            return !collection.Any()
+            return collection.Count == 0
                 ? NotFound($"Attendances not found.")
                 : Ok(collection.Select(i => _mapper.Map<AttendanceDto>(i)));
         }
