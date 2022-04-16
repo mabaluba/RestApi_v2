@@ -57,7 +57,7 @@ namespace M10_RestApi.Controllers
         {
             var collection = await _entityServiceAsync.GetAllEntitiesAsync();
 
-            return collection.Any()
+            return !collection.Any()
                 ? NotFound($"Attendances not found.")
                 : Ok(collection.Select(i => _mapper.Map<AttendanceDto>(i)));
         }
