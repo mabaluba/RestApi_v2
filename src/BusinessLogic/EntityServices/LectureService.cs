@@ -58,21 +58,15 @@ namespace BusinessLogic.EntityServices
 
         public IReadOnlyCollection<ILecture> GetAllEntities() => _repository.GetAllEntities();
 
+        public Task<IReadOnlyCollection<ILecture>> GetAllEntitiesAsync() => _repositoryAsync.GetAllEntitiesAsync();
+
         public ILecture GetEntity(int entityId) => _repository.GetEntity(entityId);
+
+        public async Task<ILecture> GetEntityAsync(int entityId) => await _repositoryAsync.GetEntityAsync(entityId);
 
         public void DeleteEntity(int entityId) => _repository.DeleteEntity(entityId);
 
         public Task DeleteEntityAsync(int entityId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ILecture> GetEntityAsync(int entityId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IReadOnlyCollection<ILecture>> GetAllEntitiesAsync()
         {
             throw new NotImplementedException();
         }
