@@ -26,11 +26,18 @@ namespace M10_RestApi.Controllers
             _entityServiceAsync = entityServiceAsync ?? throw new System.ArgumentNullException(nameof(entityServiceAsync));
         }
 
+        // [HttpGet("{id}")]
+        // public ActionResult<LectureDto> GetLecture(int id)
+        // {
+        //    var lecture = _entityService.GetEntity(id);
+        //    return lecture == null ? NotFound($"Lecture with Id = '{id}' not found.") : _mapper.Map<LectureDto>(lecture);
+        // }
+        //
         [HttpGet("{id}")]
-        public ActionResult<LectureDto> GetLecture(int id)
+        public async Task<ActionResult<LectureDto>> GetLectureAsync(int id)
         {
-            var lecture = _entityService.GetEntity(id);
-            return lecture == null ? NotFound($"Lecture with Id = '{id}' not found.") : _mapper.Map<LectureDto>(lecture);
+            var lecture = await _entityServiceAsync.GetEntityAsync(id);
+            return lecture == null ? NotFound($"Lecture with Id = '{id}' not found.") : Ok(_mapper.Map<LectureDto>(lecture));
         }
 
         // [HttpGet("lectures")]
