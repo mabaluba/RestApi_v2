@@ -41,11 +41,13 @@ namespace M10_RestApi.Controllers
         // }
         //
         [HttpGet("lectures")]
-        public async Task<ActionResult<IReadOnlyCollection<LectureDto>>> GetLecturesAsync()
+        public async Task<ActionResult<IEnumerable<LectureDto>>> GetLecturesAsync()
         {
             var lectures = await _entityServiceAsync.GetAllEntitiesAsync();
 
-            return !lectures.Any() ? NotFound($"Lectures not found.") : Ok(lectures.Select(i => _mapper.Map<LectureDto>(i)));
+            return lectures.Count == 0
+                ? NotFound($"Lectures not found.")
+                : Ok(lectures.Select(i => _mapper.Map<LectureDto>(i)));
         }
 
         // [HttpPost]
