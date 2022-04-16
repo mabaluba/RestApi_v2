@@ -33,11 +33,19 @@ namespace M10_RestApi.Controllers
             return lecture == null ? NotFound($"Lecture with Id = '{id}' not found.") : _mapper.Map<LectureDto>(lecture);
         }
 
+        // [HttpGet("lectures")]
+        // public ActionResult<IReadOnlyCollection<LectureDto>> GetLectures()
+        // {
+        //    var result = _entityService.GetAllEntities().Select(i => _mapper.Map<LectureDto>(i)).ToArray();
+        //    return result.Length == 0 ? NotFound($"Lectures not found.") : result;
+        // }
+        //
         [HttpGet("lectures")]
-        public ActionResult<IReadOnlyCollection<LectureDto>> GetLectures()
+        public async Task<ActionResult<IReadOnlyCollection<LectureDto>>> GetLecturesAsync()
         {
-            var result = _entityService.GetAllEntities().Select(i => _mapper.Map<LectureDto>(i)).ToArray();
-            return result.Length == 0 ? NotFound($"Lectures not found.") : result;
+            var lectures = await _entityServiceAsync.GetAllEntitiesAsync();
+
+            return lectures.Any() ? NotFound($"Lectures not found.") : Ok(lectures.Select(i => _mapper.Map<LectureDto>(i)));
         }
 
         // [HttpPost]
