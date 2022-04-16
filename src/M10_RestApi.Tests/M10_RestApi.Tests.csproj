@@ -21,7 +21,7 @@
 
   <ItemGroup>
   	<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-  		<_Parameter1>Banch</_Parameter1>
+  		<_Parameter1>Banchmark</_Parameter1>
   	</AssemblyAttribute>
   </ItemGroup>    
 
