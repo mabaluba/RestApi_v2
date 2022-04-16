@@ -164,12 +164,15 @@ namespace DataAccess.EntityRepositories
             return _mapper.Map<Lecture>(lectureDb);
         }
 
-        public Task DeleteEntityAsync(int attendanceId)
+        public async Task<ILecture> GetEntityAsync(int lectureId)
         {
-            throw new NotImplementedException();
+            var lectureDb = await _context.Lectures.FindAsync(lectureId) ?? throw new MissingMemberException($"Cannot find member with Id = {lectureId}.");
+
+            _logger.LogInformation($"Get member with id = {lectureId} from database.");
+            return _mapper.Map<Lecture>(lectureDb);
         }
 
-        public Task<ILecture> GetEntityAsync(int attendanceId)
+        public Task DeleteEntityAsync(int attendanceId)
         {
             throw new NotImplementedException();
         }
