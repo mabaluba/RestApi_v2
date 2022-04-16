@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic.Tests", "Busi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "M10_RestApi.Tests", "M10_RestApi.Tests\M10_RestApi.Tests.csproj", "{58C3D175-3B6F-4711-BF46-4F0E929C1A6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banch", "Banch\Banch.csproj", "{A07B55FD-52A2-4C43-9017-F1517205B88F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,10 +45,6 @@ Global
 		{58C3D175-3B6F-4711-BF46-4F0E929C1A6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58C3D175-3B6F-4711-BF46-4F0E929C1A6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58C3D175-3B6F-4711-BF46-4F0E929C1A6F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A07B55FD-52A2-4C43-9017-F1517205B88F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A07B55FD-52A2-4C43-9017-F1517205B88F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A07B55FD-52A2-4C43-9017-F1517205B88F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A07B55FD-52A2-4C43-9017-F1517205B88F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
