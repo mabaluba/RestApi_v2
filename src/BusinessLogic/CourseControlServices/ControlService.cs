@@ -22,6 +22,7 @@ namespace BusinessLogic.CourseControlServices
         private readonly IEntityRepositoryAsync<ILecture> _repositoryLectureAsync;
         private readonly IEntityRepository<ILecture> _repositoryLecture;
         private readonly IEntityRepository<ITeacher> _repositoryTeacher;
+        private readonly IAverageGradeRepositoryAsync<IAverageGrade> _repositoryAGRasync;
         private readonly IAverageGradeRepository<IAverageGrade> _repositoryAGR;
         private readonly IOptions<EducationMailContacts> _options;
 
@@ -30,21 +31,23 @@ namespace BusinessLogic.CourseControlServices
             IEntityRepository<IAttendance> repositoryAttendance,
             IEntityRepository<ILecture> repositoryLecture,
             IEntityRepository<ITeacher> repositoryTeacher,
-            IAverageGradeRepository<IAverageGrade> repositoryAGR,
+            IAverageGradeRepositoryAsync<IAverageGrade> repositoryAGRasync,
             IOptions<EducationMailContacts> options,
             IEntityRepositoryAsync<IAttendance> repositoryAttendanceAsync,
             IEntityRepositoryAsync<ITeacher> repositoryTeacherAsync,
-            IEntityRepositoryAsync<ILecture> repositoryLectureAsync)
+            IEntityRepositoryAsync<ILecture> repositoryLectureAsync,
+            IAverageGradeRepository<IAverageGrade> repositoryAGR)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _repositoryAttendance = repositoryAttendance ?? throw new ArgumentNullException(nameof(repositoryAttendance));
             _repositoryLecture = repositoryLecture ?? throw new ArgumentNullException(nameof(repositoryLecture));
             _repositoryTeacher = repositoryTeacher ?? throw new ArgumentNullException(nameof(repositoryTeacher));
-            _repositoryAGR = repositoryAGR ?? throw new ArgumentNullException(nameof(repositoryAGR));
+            _repositoryAGRasync = repositoryAGRasync ?? throw new ArgumentNullException(nameof(repositoryAGRasync));
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _repositoryAttendanceAsync = repositoryAttendanceAsync ?? throw new ArgumentNullException(nameof(repositoryAttendanceAsync));
             _repositoryTeacherAsync = repositoryTeacherAsync ?? throw new ArgumentNullException(nameof(repositoryTeacherAsync));
             _repositoryLectureAsync = repositoryLectureAsync ?? throw new ArgumentNullException(nameof(repositoryLectureAsync));
+            _repositoryAGR = repositoryAGR ?? throw new ArgumentNullException(nameof(repositoryAGR));
         }
 
         public void ControlStudent(IAttendance entity)
@@ -96,7 +99,7 @@ namespace BusinessLogic.CourseControlServices
                 StudentAverageGrade = averageGrade
             };
 
-            return await _repositoryAGR.EditEntityAsync(studentGradeToSave);
+            return await _repositoryAGRasync.EditEntityAsync(studentGradeToSave);
         }
 
         private async Task<IAttendance[]> FindStudentAttendancesAsync(IAttendance entity)

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using EducationDomain.EntityInterfaces;
 
 namespace EducationDomain.ServiceInterfaces
@@ -8,8 +7,6 @@ namespace EducationDomain.ServiceInterfaces
         where T : IAverageGrade
     {
         T GetEntity(int entityId);
-
-        Task<T> EditEntityAsync(T student);
 
         IReadOnlyCollection<T> GetAllEntities();
 

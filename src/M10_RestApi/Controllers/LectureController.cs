@@ -5,7 +5,6 @@ using AutoMapper;
 using BusinessLogic.EntityServices;
 using EducationDomain.DomainEntites;
 using EducationDomain.EntityInterfaces;
-using EducationDomain.ServiceInterfaces;
 using M10_RestApi.ModelsDto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,14 +14,15 @@ namespace M10_RestApi.Controllers
     [Route("/api/education/lecture")]
     public class LectureController : ControllerBase
     {
-        private readonly IEntityService<ILecture> _entityService;
+        // private readonly IEntityService<ILecture> _entityService;
         private readonly IEntityServiceAsync<ILecture> _entityServiceAsync;
         private readonly IMapper _mapper;
 
-        public LectureController(IMapper mapper, IEntityService<ILecture> entityService, IEntityServiceAsync<ILecture> entityServiceAsync)
+        public LectureController(IMapper mapper/*, IEntityService<ILecture> entityService*/, IEntityServiceAsync<ILecture> entityServiceAsync)
         {
             _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
-            _entityService = entityService ?? throw new System.ArgumentNullException(nameof(entityService));
+
+            // _entityService = entityService ?? throw new System.ArgumentNullException(nameof(entityService));
             _entityServiceAsync = entityServiceAsync ?? throw new System.ArgumentNullException(nameof(entityServiceAsync));
         }
 
