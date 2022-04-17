@@ -140,6 +140,16 @@ namespace DataAccess.EntityRepositories
             _logger.LogInformation($"Delete member with id = {lectureId} from database.");
         }
 
+        public async Task DeleteEntityAsync(int lectureId)
+        {
+            var lectureDb = await _context.Lectures.FindAsync(lectureId)
+                ?? throw new MissingMemberException($"Cannot find member with Id = {lectureId}.");
+
+            _context.Lectures.Remove(lectureDb);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation($"Delete member with id = {lectureId} from database.");
+        }
+
         public IReadOnlyCollection<ILecture> GetAllEntities()
         {
             var lectures = _context.Lectures?.ToArray() ?? throw new ArgumentNullException();
@@ -170,11 +180,6 @@ namespace DataAccess.EntityRepositories
 
             _logger.LogInformation($"Get member with id = {lectureId} from database.");
             return _mapper.Map<Lecture>(lectureDb);
-        }
-
-        public Task DeleteEntityAsync(int attendanceId)
-        {
-            throw new NotImplementedException();
         }
     }
 }
