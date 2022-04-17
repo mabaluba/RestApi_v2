@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading.Tasks;
 using M10_RestApi.ModelsDto;
 using Microsoft.AspNetCore.Mvc.Testing;
 using NUnit.Framework;
@@ -33,10 +34,10 @@ namespace M10_RestApi.Tests.IntegrationTests
 
         [TestCase("1")]
         [TestCase("6")]
-        public void GetAverageGrade_GivenValidId_ResponseOk(string id)
+        public async Task GetAverageGrade_GivenValidId_ResponseOk(string id)
         {
             // Act
-            var response = _client.GetAsync(id).Result;
+            var response = await _client.GetAsync(id);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -47,57 +48,57 @@ namespace M10_RestApi.Tests.IntegrationTests
         [TestCase("-6")]
         [TestCase("123")]
         [TestCase("")]
-        public void GetAverageGrade_GivenNotValidId_ResponseNotFound(string id)
+        public async Task GetAverageGrade_GivenNotValidId_ResponseNotFound(string id)
         {
             // Act
-            var response = _client.GetAsync(id).Result;
+            var response = await _client.GetAsync(id);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
         [Test]
-        public void GetAverageGrades_ResponseOk()
+        public async Task GetAverageGrades_ResponseOk()
         {
             // Act
-            var response = _client.GetAsync("allstudents").Result;
+            var response = await _client.GetAsync("allstudents");
 
             // Assert
             response.EnsureSuccessStatusCode();
         }
 
         [Test]
-        public void GetAverageGrades_ReturnStudentsAVG_Count_6_FromTestDb()
+        public async Task GetAverageGrades_ReturnStudentsAVG_Count_6_FromTestDb()
         {
             // Act
-            var response = _client.GetAsync("allstudents").Result;
-            var res = response.Content.ReadAsStringAsync().Result;
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            var students = JsonSerializer.Deserialize<AverageGradeDto[]>(res, options);
+            AverageGradeDto[] students = await GetStudentsAsync();
 
             // Assert
             Assert.That(students.Length, Is.EqualTo(6));
         }
 
         [Test]
-        public void GetAverageGrades_ReturnCorrectStudentsAVG_FromTestDb()
+        public async Task GetAverageGrades_ReturnCorrectStudentsAVG_FromTestDb()
         {
             // Act
-            var response = _client.GetAsync("allstudents").Result;
-            var res = response.Content.ReadAsStringAsync().Result;
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            var students = JsonSerializer.Deserialize<AverageGradeDto[]>(res, options);
+            AverageGradeDto[] students = await GetStudentsAsync();
             var grades = students.Select(i => i.StudentAverageGrade);
             var expected = new double[] { 4.25, 3.5, 4.25, 0.5, 0, 0 };
 
             // Assert
             Assert.That(grades, Is.EquivalentTo(expected));
+        }
+
+        private async Task<AverageGradeDto[]> GetStudentsAsync()
+        {
+            var response = await _client.GetAsync("allstudents");
+            var res = await response.Content.ReadAsStreamAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            var students = await JsonSerializer.DeserializeAsync<AverageGradeDto[]>(res, options);
+            return students;
         }
     }
 }
