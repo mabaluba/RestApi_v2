@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
-using UniversityDomain.EntityInterfaces;
-using UniversityDomain.ServiceInterfaces;
 using M10_RestApi.ModelsDto;
 using Microsoft.AspNetCore.Mvc;
+using UniversityDomain.EntityInterfaces;
+using UniversityDomain.ServiceInterfaces;
 
 namespace M10_RestApi.Controllers
 {
@@ -12,27 +13,31 @@ namespace M10_RestApi.Controllers
     [Route("/api/education/averagegrade")]
     public class StudentAverageGradeController : ControllerBase
     {
-        private readonly IAverageGradeService<IAverageGrade> _entityService;
+        // private readonly IAverageGradeService<IAverageGrade> _entityService;
+        private readonly IAverageGradeServiceAsync<IAverageGrade> _entityServiceAsync;
         private readonly IMapper _mapper;
 
-        public StudentAverageGradeController(IMapper mapper, IAverageGradeService<IAverageGrade> entityService)
+        public StudentAverageGradeController(IMapper mapper/*, IAverageGradeService<IAverageGrade> entityService*/, IAverageGradeServiceAsync<IAverageGrade> entityServiceAsync)
         {
-            _mapper = mapper;
-            _entityService = entityService;
+            _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
+
+            // _entityService = entityService ?? throw new System.ArgumentNullException(nameof(entityService));
+            _entityServiceAsync = entityServiceAsync ?? throw new System.ArgumentNullException(nameof(entityServiceAsync));
         }
 
         [HttpGet("{studentId}")]
-        public ActionResult<AverageGradeDto> GetAverageGrade(int studentId)
+        public async Task<ActionResult<AverageGradeDto>> GetAverageGradeAsync(int studentId)
         {
-            var studentAG = _entityService.GetEntity(studentId);
-            return studentAG == null ? NotFound($"Student with Id = '{studentId}' not found.") : _mapper.Map<AverageGradeDto>(studentAG);
+            var studentAG = await _entityServiceAsync.GetEntityAsync(studentId);
+            return studentAG == null ? NotFound($"Student with Id = '{studentId}' not found.") : Ok(_mapper.Map<AverageGradeDto>(studentAG));
         }
 
         [HttpGet("allstudents")]
-        public ActionResult<IReadOnlyCollection<AverageGradeDto>> GetAverageGrades()
+        public async Task<ActionResult<IEnumerable<AverageGradeDto>>> GetAverageGradesAsync()
         {
-            var studentsAG = _entityService.GetAllEntities().Select(i => _mapper.Map<AverageGradeDto>(i)).ToArray();
-            return studentsAG.Length == 0 ? NotFound($"Students not found.") : studentsAG;
+            var studentsAG = await _entityServiceAsync.GetAllEntitiesAsync();
+
+            return studentsAG.Count == 0 ? NotFound($"Students not found.") : Ok(studentsAG.Select(i => _mapper.Map<AverageGradeDto>(i)));
         }
     }
 }
