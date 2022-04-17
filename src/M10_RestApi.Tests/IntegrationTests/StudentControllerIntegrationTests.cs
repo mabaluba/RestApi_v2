@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using M10_RestApi.ModelsDto;
 using Microsoft.AspNetCore.Mvc.Testing;
 using NUnit.Framework;
@@ -33,10 +34,10 @@ namespace M10_RestApi.Tests.IntegrationTests
 
         [TestCase("1")]
         [TestCase("5")]
-        public void GetStudent_GivenValidId_ResponseOk(string id)
+        public async Task GetStudent_GivenValidId_ResponseOk(string id)
         {
             // Act
-            var response = _client.GetAsync(id).Result;
+            var response = await _client.GetAsync(id);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -46,53 +47,59 @@ namespace M10_RestApi.Tests.IntegrationTests
         [TestCase("7")]
         [TestCase("-6")]
         [TestCase("123")]
-        public void GetStudent_GivenNotValidId_ResponseNotFound(string id)
+        public async Task GetStudent_GivenNotValidId_ResponseNotFound(string id)
         {
             // Act
-            var response = _client.GetAsync(id).Result;
+            var response = await _client.GetAsync(id);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
         [TestCase("")]
-        public void GetStudent_GivenEmpty_ResponseMethodNotAllowed(string id)
+        public async Task GetStudent_GivenEmpty_ResponseMethodNotAllowed(string id)
         {
             // Act
-            var response = _client.GetAsync(id).Result;
+            var response = await _client.GetAsync(id);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.MethodNotAllowed));
         }
 
         [Test]
-        public void GetStudents_ResponseOk()
+        public async Task GetStudents_ResponseOk()
         {
             // Act
-            var response = _client.GetAsync("students").Result;
+            var response = await _client.GetAsync("students");
 
             // Assert
             response.EnsureSuccessStatusCode();
         }
 
         [Test]
-        public void GetStudents_ReturnStudentsCount_6_FromTestDb()
+        public async Task GetStudents_ReturnStudentsCount_6_FromTestDb()
         {
             // Act
-            var response = _client.GetAsync("students").Result;
-            var res = response.Content.ReadAsStringAsync().Result;
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            var students = JsonSerializer.Deserialize<StudentDto[]>(res, options);
+            StudentDto[] students = await GetStudentsAsync();
 
             // Assert
             Assert.That(students.Length, Is.EqualTo(6));
         }
 
+        private async Task<StudentDto[]> GetStudentsAsync()
+        {
+            var response = await _client.GetAsync("students");
+            var res = await response.Content.ReadAsStreamAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            var students = await JsonSerializer.DeserializeAsync<StudentDto[]>(res, options);
+            return students;
+        }
+
         [Test]
-        public void CreateStudent_GivenValidStudentDtoModel_ResponseOk()
+        public async Task CreateStudent_GivenValidStudentDtoModel_ResponseOk()
         {
             // Arrange
             var student = new StudentPostDto
@@ -107,14 +114,14 @@ namespace M10_RestApi.Tests.IntegrationTests
             var content = new StringContent(studentDto, Encoding.UTF8, "application/json");
 
             // Act
-            var response = _client.PostAsync("", content).Result;
+            var response = await _client.PostAsync("", content);
 
             // Assert
             response.EnsureSuccessStatusCode();
         }
 
         [TestCase("3")]
-        public void EditStudent_(string id)
+        public async Task EditStudent_(string id)
         {
             // Arrange
             var student = new StudentDto
@@ -130,7 +137,7 @@ namespace M10_RestApi.Tests.IntegrationTests
             var content = new StringContent(studentDto, Encoding.UTF8, "application/json");
 
             // Act
-            var response = _client.PutAsync(id, content).Result;
+            var response = await _client.PutAsync(id, content);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -138,10 +145,10 @@ namespace M10_RestApi.Tests.IntegrationTests
 
         [TestCase("1")]
         [TestCase("2")]
-        public void DeleteStudent_GivenValidId_ResponseOk(string id)
+        public async Task DeleteStudent_GivenValidId_ResponseOk(string id)
         {
             // Act
-            var response = _client.DeleteAsync(id).Result;
+            var response = await _client.DeleteAsync(id);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -149,10 +156,10 @@ namespace M10_RestApi.Tests.IntegrationTests
 
         [TestCase("0")]
         [TestCase("7")]
-        public void DeleteStudent_GivenNotValidId_ResponseNotFound(string id)
+        public async Task DeleteStudent_GivenNotValidId_ResponseNotFound(string id)
         {
             // Act
-            var response = _client.DeleteAsync(id).Result;
+            var response = await _client.DeleteAsync(id);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
