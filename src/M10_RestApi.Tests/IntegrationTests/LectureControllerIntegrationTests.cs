@@ -34,10 +34,10 @@ namespace M10_RestApi.Tests.IntegrationTests
 
         [TestCase("1")]
         [TestCase("5")]
-        public void GetLecture_GivenValidId_ResponseOk(string id)
+        public async Task GetLectureAsync_GivenValidId_ResponseOk(string id)
         {
             // Act
-            var response = _client.GetAsync(id).Result;
+            var response = await _client.GetAsync(id);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -47,10 +47,10 @@ namespace M10_RestApi.Tests.IntegrationTests
         [TestCase("6")]
         [TestCase("-6")]
         [TestCase("123")]
-        public void GetLecture_GivenNotValidId_ResponseNotFound(string id)
+        public async Task GetLectureAsync_GivenNotValidId_ResponseNotFound(string id)
         {
             // Act
-            var response = _client.GetAsync(id).Result;
+            var response = await _client.GetAsync(id);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
@@ -58,36 +58,36 @@ namespace M10_RestApi.Tests.IntegrationTests
 
         [TestCase("")]
         [TestCase(null)]
-        public void GetLecture_GivenEmpty_ResponseNotFound(string id)
+        public async Task GetLectureAsync_GivenEmpty_ResponseNotFound(string id)
         {
             // Act
-            var response = _client.GetAsync(id).Result;
+            var response = await _client.GetAsync(id);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.MethodNotAllowed));
         }
 
         [Test]
-        public void GetLectures_ResponseOk()
+        public async Task GetLecturesAsync_ResponseOk()
         {
             // Act
-            var response = _client.GetAsync("lectures").Result;
+            var response = await _client.GetAsync("lectures");
 
             // Assert
             response.EnsureSuccessStatusCode();
         }
 
         [Test]
-        public void GetLectures_ReturnLecturesCount_5_FromTestDb()
+        public async Task GetLecturesAsync_ReturnLecturesCount_5_FromTestDb()
         {
             // Act
-            var response = _client.GetAsync("lectures").Result;
-            var res = response.Content.ReadAsStringAsync().Result;
+            var response = await _client.GetAsync("lectures");
+            var res = await response.Content.ReadAsStreamAsync();
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             };
-            var lectures = JsonSerializer.Deserialize<LectureDto[]>(res, options);
+            var lectures = await JsonSerializer.DeserializeAsync<LectureDto[]>(res, options);
 
             // Assert
             Assert.That(lectures.Length, Is.EqualTo(5));
@@ -157,7 +157,7 @@ namespace M10_RestApi.Tests.IntegrationTests
         // }
         //
         [TestCase("3")]
-        public void EditLecture_GivenValidInfo_ResponseOk(string id)
+        public async Task EditLectureAsync_GivenValidInfo_ResponseOk(string id)
         {
             // Arrange
             var lecture = new LectureDto
@@ -172,7 +172,7 @@ namespace M10_RestApi.Tests.IntegrationTests
             var content = new StringContent(lectureDto, Encoding.UTF8, "application/json");
 
             // Act
-            var response = _client.PutAsync(id, content).Result;
+            var response = await _client.PutAsync(id, content);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -202,10 +202,10 @@ namespace M10_RestApi.Tests.IntegrationTests
         //
         [TestCase("1")]
         [TestCase("5")]
-        public void DeleteLecture_GivenValidId_ResponseOk(string id)
+        public async Task DeleteLecture_GivenValidId_ResponseOk(string id)
         {
             // Act
-            var response = _client.DeleteAsync(id).Result;
+            var response = await _client.DeleteAsync(id);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -213,10 +213,10 @@ namespace M10_RestApi.Tests.IntegrationTests
 
         [TestCase("0")]
         [TestCase("6")]
-        public void DeleteLecture_GivenNotValidId_ResponseNotFound(string id)
+        public async Task DeleteLecture_GivenNotValidId_ResponseNotFound(string id)
         {
             // Act
-            var response = _client.DeleteAsync(id).Result;
+            var response = await _client.DeleteAsync(id);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
