@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using M10_RestApi.ModelsDto;
 using Microsoft.AspNetCore.Mvc.Testing;
 using NUnit.Framework;
@@ -33,10 +34,10 @@ namespace M10_RestApi.Tests.IntegrationTests
 
         [TestCase("1")]
         [TestCase("2")]
-        public void GetTeacher_GivenValidId_ResponseOk(string id)
+        public async Task GetTeacher_GivenValidId_ResponseOk(string id)
         {
             // Act
-            var response = _client.GetAsync(id).Result;
+            var response = await _client.GetAsync(id);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -45,53 +46,53 @@ namespace M10_RestApi.Tests.IntegrationTests
         [TestCase("0")]
         [TestCase("4")]
         [TestCase("123")]
-        public void GetTeacher_GivenNotValidId_ResponseNotFound(string id)
+        public async Task GetTeacher_GivenNotValidId_ResponseNotFound(string id)
         {
             // Act
-            var response = _client.GetAsync(id).Result;
+            var response = await _client.GetAsync(id);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
         [TestCase("")]
-        public void GetTeacher_GivenEmpty_ResponseNotFound(string id)
+        public async Task GetTeacher_GivenEmpty_ResponseNotFound(string id)
         {
             // Act
-            var response = _client.GetAsync(id).Result;
+            var response = await _client.GetAsync(id);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.MethodNotAllowed));
         }
 
         [Test]
-        public void GetTeachers_ResponseOk()
+        public async Task GetTeachers_ResponseOk()
         {
             // Act
-            var response = _client.GetAsync("teachers").Result;
+            var response = await _client.GetAsync("teachers");
 
             // Assert
             response.EnsureSuccessStatusCode();
         }
 
         [Test]
-        public void GetTeachers_ReturnTeachersCount_3_FromTestDb()
+        public async Task GetTeachers_ReturnTeachersCount_3_FromTestDb()
         {
             // Act
-            var response = _client.GetAsync("teachers").Result;
-            var res = response.Content.ReadAsStringAsync().Result;
+            var response = await _client.GetAsync("teachers");
+            var res = await response.Content.ReadAsStreamAsync();
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             };
-            var teachers = JsonSerializer.Deserialize<TeacherDto[]>(res, options);
+            var teachers = await JsonSerializer.DeserializeAsync<TeacherDto[]>(res, options);
 
             // Assert
             Assert.That(teachers.Length, Is.EqualTo(3));
         }
 
         [Test]
-        public void CreateTeacher_GivenValidTeacherDtoModel_ResponseOk()
+        public async Task CreateTeacher_GivenValidTeacherDtoModel_ResponseOk()
         {
             // Arrange
             var teacher = new TeacherPostDto
@@ -106,14 +107,14 @@ namespace M10_RestApi.Tests.IntegrationTests
             var content = new StringContent(teacherDto, Encoding.UTF8, "application/json");
 
             // Act
-            var response = _client.PostAsync("", content).Result;
+            var response = await _client.PostAsync("", content);
 
             // Assert
             response.EnsureSuccessStatusCode();
         }
 
         [TestCase("2")]
-        public void EditTeacher_(string id)
+        public async Task EditTeacher_(string id)
         {
             // Arrange
             var teacher = new TeacherDto
@@ -129,7 +130,7 @@ namespace M10_RestApi.Tests.IntegrationTests
             var content = new StringContent(teacherDto, Encoding.UTF8, "application/json");
 
             // Act
-            var response = _client.PutAsync(id, content).Result;
+            var response = await _client.PutAsync(id, content);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -137,10 +138,10 @@ namespace M10_RestApi.Tests.IntegrationTests
 
         [TestCase("1")]
         [TestCase("2")]
-        public void DeleteTeacher_GivenValidId_ResponseOk(string id)
+        public async Task DeleteTeacher_GivenValidId_ResponseOk(string id)
         {
             // Act
-            var response = _client.DeleteAsync(id).Result;
+            var response = await _client.DeleteAsync(id);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -148,10 +149,10 @@ namespace M10_RestApi.Tests.IntegrationTests
 
         [TestCase("0")]
         [TestCase("4")]
-        public void DeleteTeacher_GivenNotValidId_ResponseNotFound(string id)
+        public async Task DeleteTeacher_GivenNotValidId_ResponseNotFound(string id)
         {
             // Act
-            var response = _client.DeleteAsync(id).Result;
+            var response = await _client.DeleteAsync(id);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
