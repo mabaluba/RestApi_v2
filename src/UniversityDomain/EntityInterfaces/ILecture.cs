@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EducationDomain.EntityInterfaces
+namespace UniversityDomain.EntityInterfaces
 {
     public interface ILecture : IEntity
     {

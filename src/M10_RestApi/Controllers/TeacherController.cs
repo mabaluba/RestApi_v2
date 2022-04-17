@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using EducationDomain.DomainEntites;
-using EducationDomain.EntityInterfaces;
-using EducationDomain.ServiceInterfaces;
+using UniversityDomain.DomainEntites;
+using UniversityDomain.EntityInterfaces;
+using UniversityDomain.ServiceInterfaces;
 using M10_RestApi.ModelsDto;
 using Microsoft.AspNetCore.Mvc;
 

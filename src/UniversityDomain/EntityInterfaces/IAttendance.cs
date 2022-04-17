@@ -1,4 +1,4 @@
-﻿namespace EducationDomain.EntityInterfaces
+﻿namespace UniversityDomain.EntityInterfaces
 {
     public interface IAttendance : IEntity
     {

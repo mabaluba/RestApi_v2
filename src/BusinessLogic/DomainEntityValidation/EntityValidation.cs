@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using EducationDomain.EntityInterfaces;
 using Microsoft.Extensions.Logging;
+using UniversityDomain.EntityInterfaces;
 
 namespace BusinessLogic.DomainEntityValidation
 {

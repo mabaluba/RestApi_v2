@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using BusinessLogic.BusinessLogicExceptions;
-using EducationDomain.EntityInterfaces;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using UniversityDomain.EntityInterfaces;
 
 namespace BusinessLogic.NotivicationServices
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using BusinessLogic.ReportServices;
-using EducationDomain.EntityInterfaces;
+using UniversityDomain.EntityInterfaces;
 using M10_RestApi.ModelsDto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

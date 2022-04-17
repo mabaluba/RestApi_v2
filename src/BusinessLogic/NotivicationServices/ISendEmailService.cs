@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using EducationDomain.EntityInterfaces;
+using UniversityDomain.EntityInterfaces;
 
 namespace BusinessLogic.NotivicationServices
 {

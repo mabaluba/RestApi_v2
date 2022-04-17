@@ -1,4 +1,4 @@
-﻿using EducationDomain.EntityInterfaces;
+﻿using UniversityDomain.EntityInterfaces;
 
 namespace BusinessLogic.DomainEntityValidation
 {

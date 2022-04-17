@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.NotivicationServices;
-using EducationDomain.DomainEntites;
-using EducationDomain.EntityInterfaces;
-using EducationDomain.ServiceInterfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using UniversityDomain.DomainEntites;
+using UniversityDomain.EntityInterfaces;
+using UniversityDomain.ServiceInterfaces;
 
 namespace BusinessLogic.CourseControlServices
 {

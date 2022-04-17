@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BusinessLogic.DomainEntityValidation;
-using EducationDomain.EntityInterfaces;
-using EducationDomain.ServiceInterfaces;
+using UniversityDomain.EntityInterfaces;
+using UniversityDomain.ServiceInterfaces;
 
 namespace BusinessLogic.EntityServices
 {

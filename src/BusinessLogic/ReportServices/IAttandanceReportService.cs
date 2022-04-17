@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using EducationDomain.EntityInterfaces;
+using UniversityDomain.EntityInterfaces;
 
 namespace BusinessLogic.ReportServices
 {

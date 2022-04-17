@@ -1,8 +1,8 @@
 ﻿using DataAccess.Data;
 using DataAccess.EntityRepositories;
 using DataAccess.Models;
-using EducationDomain.EntityInterfaces;
-using EducationDomain.ServiceInterfaces;
+using UniversityDomain.EntityInterfaces;
+using UniversityDomain.ServiceInterfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 

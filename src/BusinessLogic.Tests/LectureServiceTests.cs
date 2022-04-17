@@ -3,9 +3,9 @@ using System;
 // using System.Threading.Tasks;
 using BusinessLogic.DomainEntityValidation;
 using BusinessLogic.EntityServices;
-using EducationDomain.DomainEntites;
-using EducationDomain.EntityInterfaces;
-using EducationDomain.ServiceInterfaces;
+using UniversityDomain.DomainEntites;
+using UniversityDomain.EntityInterfaces;
+using UniversityDomain.ServiceInterfaces;
 using Moq;
 using NUnit.Framework;
 

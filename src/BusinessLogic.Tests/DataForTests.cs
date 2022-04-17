@@ -1,4 +1,4 @@
-﻿using EducationDomain.DomainEntites;
+﻿using UniversityDomain.DomainEntites;
 
 namespace BusinessLogic.Tests
 {

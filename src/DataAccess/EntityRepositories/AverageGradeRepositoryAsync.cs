@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using EducationDomain.DomainEntites;
-using EducationDomain.EntityInterfaces;
-using EducationDomain.ServiceInterfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using UniversityDomain.DomainEntites;
+using UniversityDomain.EntityInterfaces;
+using UniversityDomain.ServiceInterfaces;
 
 namespace DataAccess.EntityRepositories
 {
@@ -47,20 +47,28 @@ namespace DataAccess.EntityRepositories
             return _mapper.Map<AverageGrade>(studentDb);
         }
 
-        public async Task<IReadOnlyCollection<IAverageGrade>> GetAllEntitiesAsync()
+        public async IAsyncEnumerable<IAverageGrade> GetAllEntitiesAsync()
         {
-            var students = _context.Students?.ToArray() ?? throw new ArgumentNullException();
+            var students = await _context.Students.ToArrayAsync() ?? throw new ArgumentNullException();
             _ = students.Length == 0 ? throw new MissingMemberException($"Cannot find any {typeof(Student).Name} members.") : 0;
             _logger.LogInformation($"Get all members {typeof(Student).Name} from database.");
-            return _mapper.Map<IReadOnlyCollection<AverageGrade>>(students);
+            foreach (var item in students)
+            {
+                yield return _mapper.Map<AverageGrade>(item);
+            }
         }
 
         public async Task<IAverageGrade> GetEntityAsync(int studentId)
         {
-            var studentDb = _context.Students?.Find(studentId) ?? throw new MissingMemberException($"Cannot find member with Id = {studentId}.");
+            var studentDb = await _context.Students.FindAsync(studentId) ?? throw new MissingMemberException($"Cannot find member with Id = {studentId}.");
 
             _logger.LogInformation($"Get member with id = {studentId} from database.");
             return _mapper.Map<AverageGrade>(studentDb);
+        }
+
+        Task<IReadOnlyCollection<IAverageGrade>> IAverageGradeRepositoryAsync<IAverageGrade>.GetAllEntitiesAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BusinessLogic.EntityServices;
-using EducationDomain.EntityInterfaces;
-using EducationDomain.ServiceInterfaces;
+using UniversityDomain.EntityInterfaces;
+using UniversityDomain.ServiceInterfaces;
 using Microsoft.Extensions.Logging;
 
 namespace BusinessLogic.ReportServices

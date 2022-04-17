@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using EducationDomain.DomainEntites;
+using UniversityDomain.DomainEntites;
 
 namespace DataAccess.Models
 {

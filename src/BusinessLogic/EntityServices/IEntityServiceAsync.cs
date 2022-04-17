@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using EducationDomain.EntityInterfaces;
+using UniversityDomain.EntityInterfaces;
 
 namespace BusinessLogic.EntityServices
 {

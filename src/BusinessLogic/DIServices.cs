@@ -2,9 +2,9 @@
 using BusinessLogic.DomainEntityValidation;
 using BusinessLogic.EntityServices;
 using BusinessLogic.ReportServices;
-using EducationDomain.EntityInterfaces;
-using EducationDomain.ServiceInterfaces;
 using Microsoft.Extensions.DependencyInjection;
+using UniversityDomain.EntityInterfaces;
+using UniversityDomain.ServiceInterfaces;
 
 namespace BusinessLogic
 {

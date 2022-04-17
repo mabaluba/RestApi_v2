@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using EducationDomain.EntityInterfaces;
+using UniversityDomain.EntityInterfaces;
 
-namespace EducationDomain.DomainEntites
+namespace UniversityDomain.DomainEntites
 {
     public class Lecture : ILecture
     {

@@ -1,13 +1,13 @@
 using System;
 using BusinessLogic.CourseControlServices;
 using BusinessLogic.NotivicationServices;
-using EducationDomain.DomainEntites;
-using EducationDomain.EntityInterfaces;
-using EducationDomain.ServiceInterfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
+using UniversityDomain.DomainEntites;
+using UniversityDomain.EntityInterfaces;
+using UniversityDomain.ServiceInterfaces;
 
 namespace BusinessLogic.Tests
 {
@@ -19,6 +19,7 @@ namespace BusinessLogic.Tests
         private IEntityRepository<ILecture> _repositoryLecture;
         private IEntityRepository<ITeacher> _repositoryTeacher;
         private IAverageGradeRepository<IAverageGrade> _repositoryAGR;
+        private IAverageGradeRepositoryAsync<IAverageGrade> _repositoryAGRasync;
         private IOptions<EducationMailContacts> _options;
         private IEntityRepositoryAsync<IAttendance> _repositoryAttendanceAsync;
         private IEntityRepositoryAsync<ITeacher> _repositoryTeacherAsync;
@@ -32,6 +33,7 @@ namespace BusinessLogic.Tests
             _repositoryLecture = new Mock<IEntityRepository<ILecture>>().Object;
             _repositoryTeacher = new Mock<IEntityRepository<ITeacher>>().Object;
             _repositoryAGR = new Mock<IAverageGradeRepository<IAverageGrade>>().Object;
+            _repositoryAGRasync = new Mock<IAverageGradeRepositoryAsync<IAverageGrade>>().Object;
             _options = new Mock<IOptions<EducationMailContacts>>().Object;
             _repositoryAttendanceAsync = new Mock<IEntityRepositoryAsync<IAttendance>>().Object;
             _repositoryTeacherAsync = new Mock<IEntityRepositoryAsync<ITeacher>>().Object;
@@ -46,6 +48,7 @@ namespace BusinessLogic.Tests
             _repositoryLecture = null;
             _repositoryTeacher = null;
             _repositoryAGR = null;
+            _repositoryAGRasync = null;
             _options = null;
             _repositoryAttendanceAsync = null;
             _repositoryTeacherAsync = null;
@@ -62,11 +65,12 @@ namespace BusinessLogic.Tests
                 _repositoryAttendance,
                 _repositoryLecture,
                 _repositoryTeacher,
-                _repositoryAGR,
+                _repositoryAGRasync,
                 _options,
                 _repositoryAttendanceAsync,
                 _repositoryTeacherAsync,
-                _repositoryLectureAsync);
+                _repositoryLectureAsync,
+                _repositoryAGR);
 
             // Act
             Action attandanceWithNull = () => service.ControlStudent(attendance);
@@ -79,15 +83,16 @@ namespace BusinessLogic.Tests
         public void ControlStudent_GivenNullArgs_ThrowArgumentNullException()
         {
             // Act
-            Action loggerNull = () => new ControlService(null, _repositoryAttendance, _repositoryLecture, _repositoryTeacher, _repositoryAGR, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync);
-            Action repositoryAttendanceNull = () => new ControlService(_logger, null, _repositoryLecture, _repositoryTeacher, _repositoryAGR, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync);
-            Action repositoryLectureNull = () => new ControlService(_logger, _repositoryAttendance, null, _repositoryTeacher, _repositoryAGR, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync);
-            Action repositoryTeacherNull = () => new ControlService(_logger, _repositoryAttendance, _repositoryLecture, null, _repositoryAGR, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync);
-            Action repositoryAGRNull = () => new ControlService(_logger, _repositoryAttendance, _repositoryLecture, _repositoryTeacher, null, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync);
-            Action optionsNull = () => new ControlService(_logger, _repositoryAttendance, _repositoryLecture, _repositoryTeacher, _repositoryAGR, null, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync);
-            Action repositoryAttendanceAsyncNull = () => new ControlService(_logger, _repositoryAttendance, _repositoryLecture, _repositoryTeacher, _repositoryAGR, _options, null, _repositoryTeacherAsync, _repositoryLectureAsync);
-            Action repositoryTeacherAsyncNull = () => new ControlService(_logger, _repositoryAttendance, _repositoryLecture, _repositoryTeacher, _repositoryAGR, _options, _repositoryAttendanceAsync, null, _repositoryLectureAsync);
-            Action repositoryLectureAsyncNull = () => new ControlService(_logger, _repositoryAttendance, _repositoryLecture, _repositoryTeacher, _repositoryAGR, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, null);
+            Action loggerNull = () => new ControlService(null, _repositoryAttendance, _repositoryLecture, _repositoryTeacher, _repositoryAGRasync, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync, _repositoryAGR);
+            Action repositoryAttendanceNull = () => new ControlService(_logger, null, _repositoryLecture, _repositoryTeacher, _repositoryAGRasync, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync, _repositoryAGR);
+            Action repositoryLectureNull = () => new ControlService(_logger, _repositoryAttendance, null, _repositoryTeacher, _repositoryAGRasync, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync, _repositoryAGR);
+            Action repositoryTeacherNull = () => new ControlService(_logger, _repositoryAttendance, _repositoryLecture, null, _repositoryAGRasync, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync, _repositoryAGR);
+            Action repositoryAGRNull = () => new ControlService(_logger, _repositoryAttendance, _repositoryLecture, _repositoryTeacher, null, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync, _repositoryAGR);
+            Action optionsNull = () => new ControlService(_logger, _repositoryAttendance, _repositoryLecture, _repositoryTeacher, _repositoryAGRasync, null, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync, _repositoryAGR);
+            Action repositoryAttendanceAsyncNull = () => new ControlService(_logger, _repositoryAttendance, _repositoryLecture, _repositoryTeacher, _repositoryAGRasync, _options, null, _repositoryTeacherAsync, _repositoryLectureAsync, _repositoryAGR);
+            Action repositoryTeacherAsyncNull = () => new ControlService(_logger, _repositoryAttendance, _repositoryLecture, _repositoryTeacher, _repositoryAGRasync, _options, _repositoryAttendanceAsync, null, _repositoryLectureAsync, _repositoryAGR);
+            Action repositoryLectureAsyncNull = () => new ControlService(_logger, _repositoryAttendance, _repositoryLecture, _repositoryTeacher, _repositoryAGRasync, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, null, _repositoryAGR);
+            Action repositoryOtherNull = () => new ControlService(_logger, _repositoryAttendance, _repositoryLecture, _repositoryTeacher, _repositoryAGRasync, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync, null);
 
             // Assert
             Assert.Multiple(() =>
@@ -101,6 +106,7 @@ namespace BusinessLogic.Tests
                 Assert.That(repositoryAttendanceAsyncNull, Throws.Exception.TypeOf<ArgumentNullException>());
                 Assert.That(repositoryTeacherAsyncNull, Throws.Exception.TypeOf<ArgumentNullException>());
                 Assert.That(repositoryLectureAsyncNull, Throws.Exception.TypeOf<ArgumentNullException>());
+                Assert.That(repositoryOtherNull, Throws.Exception.TypeOf<ArgumentNullException>());
             });
         }
     }

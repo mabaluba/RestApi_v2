@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using EducationDomain.EntityInterfaces;
+using UniversityDomain.EntityInterfaces;
 
-namespace EducationDomain.ServiceInterfaces
+namespace UniversityDomain.ServiceInterfaces
 {
     public interface IAverageGradeRepository<T>
         where T : IAverageGrade
