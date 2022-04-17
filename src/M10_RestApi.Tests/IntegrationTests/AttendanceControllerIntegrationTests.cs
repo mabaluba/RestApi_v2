@@ -34,17 +34,6 @@ namespace M10_RestApi.Tests.IntegrationTests
             _client.Dispose();
         }
 
-        // [TestCase("1")]
-        // [TestCase("20")]
-        // public void GetAttendance_GivenValidId_ResponseOk(string id)
-        // {
-        //    // Act
-        //    var response = _client.GetAsync(id).Result;
-        //
-        //    // Assert
-        //    response.EnsureSuccessStatusCode();
-        // }
-        //
         [TestCase("1")]
         [TestCase("20")]
         public async Task GetAttendanceAsync_GivenValidId_ResponseOk(string id)
@@ -56,29 +45,6 @@ namespace M10_RestApi.Tests.IntegrationTests
             response.EnsureSuccessStatusCode();
         }
 
-        // [TestCase("0")]
-        // [TestCase("21")]
-        // [TestCase("-6")]
-        // [TestCase("123")]
-        // public void GetAttendance_GivenNotValidId_ResponseNotFound(string id)
-        // {
-        //    // Act
-        //    var response = _client.GetAsync(id).Result;
-        //
-        //    // Assert
-        //    Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-        // }
-        //
-        // [TestCase("")]
-        // public void GetAttendance_GivenEmpty_ResponseNotFound(string id)
-        // {
-        //    // Act
-        //    var response = _client.GetAsync(id).Result;
-        //
-        //    // Assert
-        //    Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.MethodNotAllowed));
-        // }
-        //
         [TestCase("0")]
         [TestCase("21")]
         [TestCase("-6")]
@@ -120,40 +86,17 @@ namespace M10_RestApi.Tests.IntegrationTests
 
             // Act
             var response = await _client.GetAsync("attendances");
-            var res = await response.Content.ReadAsStringAsync();
+            var res = await response.Content.ReadAsStreamAsync();
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             };
-            var attendances = JsonSerializer.Deserialize<AttendanceDto[]>(res, options);
+            var attendances = await JsonSerializer.DeserializeAsync<AttendanceDto[]>(res, options);
 
             // Assert
             Assert.That(attendances.Length, Is.EqualTo(count));
         }
 
-        // [Test]
-        // public void CreateAttendance_GivenValidAttendanceDtoModel_ResponseOk()
-        // {
-        //    // Arrange
-        //    var attendance = new AttendancePostDto
-        //    {
-        //        LectureTopic = "Hydraulics",
-        //        StudentFirstName = "Janet",
-        //        StudentLastName = "Gates",
-        //        IsAttended = true,
-        //        HomeworkMark = 5
-        //    };
-        //
-        //    var attendanceDto = JsonSerializer.Serialize(attendance);
-        //    var content = new StringContent(attendanceDto, Encoding.UTF8, "application/json");
-        //
-        //    // Act
-        //    var response = _client.PostAsync("", content).Result;
-        //
-        //    // Assert
-        //    response.EnsureSuccessStatusCode();
-        // }
-        //
         [Test]
         public async Task CreateAttendanceAsync_GivenValidAttendanceDtoModel_ResponseOk()
         {
@@ -222,7 +165,7 @@ namespace M10_RestApi.Tests.IntegrationTests
         }
 
         [TestCaseSource(nameof(notValidAttendances))]
-        public void EditAttendanceAsync_GivenNotValidInfo_ResponseNotFound(AttendanceDto attendance)
+        public async Task EditAttendanceAsync_GivenNotValidInfo_ResponseNotFound(AttendanceDto attendance)
         {
             // Arrange
             var id = "15";
@@ -230,45 +173,12 @@ namespace M10_RestApi.Tests.IntegrationTests
             var content = new StringContent(attendanceDto, Encoding.UTF8, "application/json");
 
             // Act
-            var response = _client.PutAsync(id, content).Result;
+            var response = await _client.PutAsync(id, content);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
-        // [TestCase("1")]
-        // [TestCase("20")]
-        // public void DeleteAttendance_GivenValidId_ResponseOk(string id)
-        // {
-        //    // Act
-        //    var response = _client.DeleteAsync(id).Result;
-        //
-        //    // Assert
-        //    response.EnsureSuccessStatusCode();
-        // }
-        //
-        // [TestCase("0")]
-        // [TestCase("21")]
-        // public void DeleteAttendance_GivenNotValidId_ResponseNotFound(string id)
-        // {
-        //    // Act
-        //    var response = _client.DeleteAsync(id).Result;
-        //
-        //    // Assert
-        //    Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-        // }
-        //
-        // [TestCase("1")]
-        // [TestCase("20")]
-        // public void DeleteAttendanceAsync_GivenValidId_ResponseOk(string id)
-        // {
-        //    // Act
-        //    var response = _client.DeleteAsync(id).Result;
-        //
-        //    // Assert
-        //    response.EnsureSuccessStatusCode();
-        // }
-        //
         [TestCase("1")]
         [TestCase("20")]
         public async Task DeleteAttendanceAsync_GivenValidId_ResponseOk(string id)
