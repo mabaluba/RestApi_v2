@@ -14,8 +14,8 @@ namespace BusinessLogic.EntityServices
             _repository = repository ?? throw new System.ArgumentNullException(nameof(repository));
         }
 
-        public async Task<IAverageGrade> GetEntity(int entityId) => await _repository.GetEntityAsync(entityId);
+        public async Task<IAverageGrade> GetEntityAsync(int entityId) => await _repository.GetEntityAsync(entityId);
 
-        public async Task<IReadOnlyCollection<IAverageGrade>> GetAllEntities() => await _repository.GetAllEntitiesAsync();
+        public async Task<IReadOnlyCollection<IAverageGrade>> GetAllEntitiesAsync() => await _repository.GetAllEntitiesAsync();
     }
 }
