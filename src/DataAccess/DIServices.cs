@@ -1,10 +1,10 @@
 ﻿using DataAccess.Data;
 using DataAccess.EntityRepositories;
 using DataAccess.Models;
-using UniversityDomain.EntityInterfaces;
-using UniversityDomain.ServiceInterfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using UniversityDomain.EntityInterfaces;
+using UniversityDomain.ServiceInterfaces;
 
 namespace DataAccess
 {

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using BusinessLogic.ReportServices;
-using UniversityDomain.EntityInterfaces;
 using M10_RestApi.ModelsDto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using UniversityDomain.EntityInterfaces;
 
 namespace M10_RestApi.Controllers
 {

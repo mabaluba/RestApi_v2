@@ -4,13 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using BusinessLogic.EntityServices;
-using UniversityDomain.DomainEntites;
-using UniversityDomain.EntityInterfaces;
-
-// using EducationDomain.EntityInterfaces;
-// using EducationDomain.ServiceInterfaces;
 using M10_RestApi.ModelsDto;
 using Microsoft.AspNetCore.Mvc;
+using UniversityDomain.DomainEntites;
+using UniversityDomain.EntityInterfaces;
 
 namespace M10_RestApi.Controllers
 {

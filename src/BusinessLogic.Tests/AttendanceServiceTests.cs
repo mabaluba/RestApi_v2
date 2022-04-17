@@ -4,11 +4,11 @@ using System.Linq;
 using BusinessLogic.CourseControlServices;
 using BusinessLogic.DomainEntityValidation;
 using BusinessLogic.EntityServices;
+using Moq;
+using NUnit.Framework;
 using UniversityDomain.DomainEntites;
 using UniversityDomain.EntityInterfaces;
 using UniversityDomain.ServiceInterfaces;
-using Moq;
-using NUnit.Framework;
 
 namespace BusinessLogic.Tests
 {

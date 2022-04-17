@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using BusinessLogic.DomainEntityValidation;
-using UniversityDomain.DomainEntites;
-using UniversityDomain.EntityInterfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using UniversityDomain.DomainEntites;
+using UniversityDomain.EntityInterfaces;
 
 namespace BusinessLogic.Tests
 {

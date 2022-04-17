@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using BusinessLogic.EntityServices;
 using BusinessLogic.ReportServices;
-using UniversityDomain.EntityInterfaces;
-using UniversityDomain.ServiceInterfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using UniversityDomain.EntityInterfaces;
+using UniversityDomain.ServiceInterfaces;
 
 namespace BusinessLogic.Tests
 {

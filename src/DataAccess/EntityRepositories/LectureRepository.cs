@@ -4,12 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using DataAccess.Models;
-using UniversityDomain.DomainEntites;
-using UniversityDomain.EntityInterfaces;
-using UniversityDomain.ServiceInterfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
+using UniversityDomain.DomainEntites;
+using UniversityDomain.EntityInterfaces;
+using UniversityDomain.ServiceInterfaces;
 
 namespace DataAccess.EntityRepositories
 {
