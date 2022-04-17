@@ -13,8 +13,8 @@ namespace BusinessLogic.EntityServices
             _repository = repository ?? throw new System.ArgumentNullException(nameof(repository));
         }
 
-        public IReadOnlyCollection<IAverageGrade> GetAllEntities() => _repository.GetAllEntities();
-
         public IAverageGrade GetEntity(int entityId) => _repository.GetEntity(entityId);
+
+        public IReadOnlyCollection<IAverageGrade> GetAllEntities() => _repository.GetAllEntities();
     }
 }

@@ -47,15 +47,12 @@ namespace DataAccess.EntityRepositories
             return _mapper.Map<AverageGrade>(studentDb);
         }
 
-        public async IAsyncEnumerable<IAverageGrade> GetAllEntitiesAsync()
+        public async Task<IReadOnlyCollection<IAverageGrade>> GetAllEntitiesAsync()
         {
             var students = await _context.Students.ToArrayAsync() ?? throw new ArgumentNullException();
             _ = students.Length == 0 ? throw new MissingMemberException($"Cannot find any {typeof(Student).Name} members.") : 0;
             _logger.LogInformation($"Get all members {typeof(Student).Name} from database.");
-            foreach (var item in students)
-            {
-                yield return _mapper.Map<AverageGrade>(item);
-            }
+            return _mapper.Map<IReadOnlyCollection<AverageGrade>>(students);
         }
 
         public async Task<IAverageGrade> GetEntityAsync(int studentId)
@@ -64,11 +61,6 @@ namespace DataAccess.EntityRepositories
 
             _logger.LogInformation($"Get member with id = {studentId} from database.");
             return _mapper.Map<AverageGrade>(studentDb);
-        }
-
-        Task<IReadOnlyCollection<IAverageGrade>> IAverageGradeRepositoryAsync<IAverageGrade>.GetAllEntitiesAsync()
-        {
-            throw new NotImplementedException();
         }
     }
 }
