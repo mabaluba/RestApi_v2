@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading.Tasks;
 using M10_RestApi.ModelsDto;
 using Microsoft.AspNetCore.Mvc.Testing;
 using NUnit.Framework;
@@ -33,26 +34,26 @@ namespace M10_RestApi.Tests.IntegrationTests
         }
 
         [TestCase("Architecture")]
-        public void GetAttendencesByTopic_GivenValidTopic_ResponseOk(string topic)
+        public async Task GetAttendencesByTopic_GivenValidTopic_ResponseOk(string topic)
         {
             // Arrange
             _client.BaseAddress = new System.Uri(_client.BaseAddress, _url + _byLecture);
 
             // Act
-            var response = _client.GetAsync(topic).Result;
+            var response = await _client.GetAsync(topic);
 
             // Assert
             response.EnsureSuccessStatusCode();
         }
 
         [TestCase("Hydraulics")]
-        public void GetAttendencesByTopic_GivenValidTopicWithNoAttandances_ResponseNotFound(string topic)
+        public async Task GetAttendencesByTopic_GivenValidTopicWithNoAttandances_ResponseNotFound(string topic)
         {
             // Arrange
             _client.BaseAddress = new System.Uri(_client.BaseAddress, _url + _byLecture);
 
             // Act
-            var response = _client.GetAsync(topic).Result;
+            var response = await _client.GetAsync(topic);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
@@ -60,45 +61,45 @@ namespace M10_RestApi.Tests.IntegrationTests
 
         [TestCase("Not Valid")]
         [TestCase("")]
-        public void GetAttendencesByTopic_GivenNotValidTopic_ResponseOk(string topic)
+        public async Task GetAttendencesByTopic_GivenNotValidTopic_ResponseOk(string topic)
         {
             // Arrange
             _client.BaseAddress = new System.Uri(_client.BaseAddress, _url + _byLecture);
 
             // Act
-            var response = _client.GetAsync(topic).Result;
+            var response = await _client.GetAsync(topic);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
         [TestCase("Architecture")]
-        public void GetAttendanceReportsByTopic_ReturnCount_5_FromTestDb(string topic)
+        public async Task GetAttendanceReportsByTopic_ReturnCount_5_FromTestDb(string topic)
         {
             // Arrange
             _client.BaseAddress = new System.Uri(_client.BaseAddress, _url + _byLecture);
 
             // Act
-            var response = _client.GetAsync(topic).Result;
-            var res = response.Content.ReadAsStringAsync().Result;
+            var response = await _client.GetAsync(topic);
+            var res = await response.Content.ReadAsStreamAsync();
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             };
-            var attendanceReports = JsonSerializer.Deserialize<AttendanceDto[]>(res, options);
+            var attendanceReports = await JsonSerializer.DeserializeAsync<AttendanceDto[]>(res, options);
 
             // Assert
             Assert.That(attendanceReports.Length, Is.EqualTo(5));
         }
 
         [TestCase("Kathleen,Garza")]
-        public void GetAttendencesByStudentName_GivenValidName_ResponseOk(string name)
+        public async Task GetAttendencesByStudentName_GivenValidName_ResponseOk(string name)
         {
             // Arrange
             _client.BaseAddress = new System.Uri(_client.BaseAddress, _url + _byStudent);
 
             // Act
-            var response = _client.GetAsync(name).Result;
+            var response = await _client.GetAsync(name);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -106,45 +107,45 @@ namespace M10_RestApi.Tests.IntegrationTests
 
         [TestCase("Not,Valid")]
         [TestCase("")]
-        public void GetAttendencesByStudentName_GivenNotValidName_ResponseOk(string name)
+        public async Task GetAttendencesByStudentName_GivenNotValidName_ResponseOk(string name)
         {
             // Arrange
             _client.BaseAddress = new System.Uri(_client.BaseAddress, _url + _byStudent);
 
             // Act
-            var response = _client.GetAsync(name).Result;
+            var response = await _client.GetAsync(name);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
         [TestCase("Christopher,Beck")]
-        public void GetAttendencesByStudentName_GivenNotValidNameWithNoAttandances_ResponseNotFound(string name)
+        public async Task GetAttendencesByStudentName_GivenNotValidNameWithNoAttandances_ResponseNotFound(string name)
         {
             // Arrange
             _client.BaseAddress = new System.Uri(_client.BaseAddress, _url + _byStudent);
 
             // Act
-            var response = _client.GetAsync(name).Result;
+            var response = await _client.GetAsync(name);
 
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
         [TestCase("Katherine,Harding")]
-        public void GetAttendencesByStudentName_ReturnCount_4_FromTestDb(string name)
+        public async Task GetAttendencesByStudentName_ReturnCount_4_FromTestDb(string name)
         {
             // Arrange
             _client.BaseAddress = new System.Uri(_client.BaseAddress, _url + _byStudent);
 
             // Act
-            var response = _client.GetAsync(name).Result;
-            var res = response.Content.ReadAsStringAsync().Result;
+            var response = await _client.GetAsync(name);
+            var res = await response.Content.ReadAsStreamAsync();
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             };
-            var attendanceReports = JsonSerializer.Deserialize<AttendanceDto[]>(res, options);
+            var attendanceReports = await JsonSerializer.DeserializeAsync<AttendanceDto[]>(res, options);
 
             // Assert
             Assert.That(attendanceReports.Length, Is.EqualTo(4));
