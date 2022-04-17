@@ -66,9 +66,6 @@ namespace BusinessLogic.EntityServices
 
         public void DeleteEntity(int entityId) => _repository.DeleteEntity(entityId);
 
-        public Task DeleteEntityAsync(int entityId)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task DeleteEntityAsync(int entityId) => await _repositoryAsync.DeleteEntityAsync(entityId);
     }
 }
