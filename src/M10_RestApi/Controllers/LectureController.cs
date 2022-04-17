@@ -95,11 +95,18 @@ namespace M10_RestApi.Controllers
             return Ok($"/api/education/lecture/{newLecture.Id}");
         }
 
+        // [HttpDelete("{id}")]
+        // public ActionResult DeleteLecture(int id)
+        // {
+        //    _entityService.DeleteEntity(id);
+        //    return Ok();
+        // }
+        //
         [HttpDelete("{id}")]
-        public ActionResult DeleteLecture(int id)
+        public async Task<ActionResult> DeleteLectureAsync(int id)
         {
-            _entityService.DeleteEntity(id);
-            return Ok();
+            await _entityServiceAsync.DeleteEntityAsync(id);
+            return NoContent();
         }
     }
 }
