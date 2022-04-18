@@ -54,6 +54,34 @@ namespace DataAccess.EntityRepositories
             return _mapper.Map<Teacher>(result?.Entity);
         }
 
+        public ITeacher CreateEntityAsync(ITeacher teacher)
+        {
+            _ = teacher ?? throw new ArgumentNullException(nameof(teacher));
+
+            var teacherDb = new TeacherDb()
+            {
+                FirstName = teacher.FirstName,
+                LastName = teacher.LastName,
+                Email = teacher.Email,
+                PhoneNumber = teacher.PhoneNumber
+            };
+
+            EntityEntry<TeacherDb> result;
+            try
+            {
+                result = _context.Teachers?.Add(teacherDb);
+                _context.SaveChanges();
+                _logger.LogInformation($"Saved member with id = {teacherDb.Id} to database.");
+            }
+            catch (DbUpdateException exception)
+            {
+                _logger.LogError(exception, exception.Message);
+                throw;
+            }
+
+            return _mapper.Map<Teacher>(result?.Entity);
+        }
+
         public ITeacher EditEntity(ITeacher teacher)
         {
             var teacherDb = _context.Teachers?.Find(teacher.Id)
