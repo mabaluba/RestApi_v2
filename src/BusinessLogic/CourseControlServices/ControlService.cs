@@ -16,48 +16,27 @@ namespace BusinessLogic.CourseControlServices
         private readonly int _averageGradeLevel = 4;
 
         private readonly ILogger<ControlService> _logger;
-        //private readonly IEntityRepository<IAttendance> _repositoryAttendance;
         private readonly IEntityRepositoryAsync<IAttendance> _repositoryAttendanceAsync;
         private readonly IEntityRepositoryAsync<ITeacher> _repositoryTeacherAsync;
         private readonly IEntityRepositoryAsync<ILecture> _repositoryLectureAsync;
-        private readonly IEntityRepository<ILecture> _repositoryLecture;
-        private readonly IEntityRepository<ITeacher> _repositoryTeacher;
         private readonly IAverageGradeRepositoryAsync<IAverageGrade> _repositoryAGRasync;
-        private readonly IAverageGradeRepository<IAverageGrade> _repositoryAGR;
         private readonly IOptions<EducationMailContacts> _options;
 
         public ControlService(
             ILogger<ControlService> logger,
-            //IEntityRepository<IAttendance> repositoryAttendance,
-            IEntityRepository<ILecture> repositoryLecture,
-            IEntityRepository<ITeacher> repositoryTeacher,
             IAverageGradeRepositoryAsync<IAverageGrade> repositoryAGRasync,
             IOptions<EducationMailContacts> options,
             IEntityRepositoryAsync<IAttendance> repositoryAttendanceAsync,
             IEntityRepositoryAsync<ITeacher> repositoryTeacherAsync,
-            IEntityRepositoryAsync<ILecture> repositoryLectureAsync,
-            IAverageGradeRepository<IAverageGrade> repositoryAGR)
+            IEntityRepositoryAsync<ILecture> repositoryLectureAsync)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            //_repositoryAttendance = repositoryAttendance ?? throw new ArgumentNullException(nameof(repositoryAttendance));
-            _repositoryLecture = repositoryLecture ?? throw new ArgumentNullException(nameof(repositoryLecture));
-            _repositoryTeacher = repositoryTeacher ?? throw new ArgumentNullException(nameof(repositoryTeacher));
             _repositoryAGRasync = repositoryAGRasync ?? throw new ArgumentNullException(nameof(repositoryAGRasync));
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _repositoryAttendanceAsync = repositoryAttendanceAsync ?? throw new ArgumentNullException(nameof(repositoryAttendanceAsync));
             _repositoryTeacherAsync = repositoryTeacherAsync ?? throw new ArgumentNullException(nameof(repositoryTeacherAsync));
             _repositoryLectureAsync = repositoryLectureAsync ?? throw new ArgumentNullException(nameof(repositoryLectureAsync));
-            _repositoryAGR = repositoryAGR ?? throw new ArgumentNullException(nameof(repositoryAGR));
         }
-
-        //public void ControlStudent(IAttendance entity)
-        //{
-        //    _ = entity ?? throw new ArgumentNullException(nameof(entity));
-
-        //    var studentWithNewGrade = UpdateGrade(entity);
-        //    ControlAttendance(entity, studentWithNewGrade);
-        //    ControlGrade(studentWithNewGrade);
-        //}
 
         // TODO : separate to several interfaces
         public async Task ControlStudentAsync(IAttendance entity)
@@ -68,23 +47,6 @@ namespace BusinessLogic.CourseControlServices
             await ControlAttendanceAsync(entity, studentWithNewGrade);
             await ControlGradeAsync(studentWithNewGrade);
         }
-
-        //private IAverageGrade UpdateGrade(IAttendance entity)
-        //{
-        //    var studentAttandances = _repositoryAttendance.GetAllEntities()
-        //        .Where(i => i.StudentFirstName == entity.StudentFirstName && i.StudentLastName == entity.StudentLastName)
-        //        .ToArray();
-        //    var averageGrade = studentAttandances.Length == 0 ? 0 : studentAttandances.Average(i => i.HomeworkMark);
-
-        //    var studentGradeToSave = new AverageGrade()
-        //    {
-        //        FirstName = entity.StudentFirstName,
-        //        LastName = entity.StudentLastName,
-        //        StudentAverageGrade = averageGrade
-        //    };
-
-        //    return _repositoryAGR.EditEntity(studentGradeToSave);
-        //}
 
         private async Task<IAverageGrade> UpdateGradeAsync(IAttendance entity)
         {
@@ -108,33 +70,6 @@ namespace BusinessLogic.CourseControlServices
             var concreteStudentAttendances = studentAttandances.Where(i => i.StudentFirstName == entity.StudentFirstName && i.StudentLastName == entity.StudentLastName).ToArray();
             return concreteStudentAttendances;
         }
-
-        //private void ControlAttendance(IAttendance entity, IAverageGrade studentInfo)
-        //{
-        //    var attendanceCount = _repositoryAttendance.GetAllEntities()
-        //        .Where(i =>
-        //            i.StudentFirstName == entity.StudentFirstName &&
-        //            i.StudentLastName == entity.StudentLastName &&
-        //            entity.IsAttended == false)
-        //        .Count()
-        //        ;
-
-        //    if (attendanceCount > _attendanceLevel)
-        //    {
-        //        var topic = entity.LectureTopic;
-        //        var teacherId = _repositoryLecture.GetAllEntities().FirstOrDefault(i => i.Topic == topic).TeacherId;
-        //        var teacher = _repositoryTeacher.GetEntity(teacherId);
-        //        try
-        //        {
-        //            SendEmailService emailService = new(_options);
-        //            emailService.SendEmailAsync(studentInfo, teacher, attendanceCount).RunSynchronously();
-        //        }
-        //        catch (Exception exception)
-        //        {
-        //            _logger.LogError(exception.Message, exception);
-        //        }
-        //    }
-        //}
 
         private async Task ControlAttendanceAsync(IAttendance entity, IAverageGrade studentInfo)
         {
@@ -169,22 +104,6 @@ namespace BusinessLogic.CourseControlServices
                 .Count();
             return attendancesCount;
         }
-
-        //private void ControlGrade(IAverageGrade studentInfo)
-        //{
-        //    if (studentInfo.StudentAverageGrade < _averageGradeLevel)
-        //    {
-        //        try
-        //        {
-        //            SendSmsService sendSmsService = new();
-        //            sendSmsService.SendSmsAsync(studentInfo.PhoneNumber).RunSynchronously();
-        //        }
-        //        catch (Exception exception)
-        //        {
-        //            _logger.LogError(exception.Message, exception);
-        //        }
-        //    }
-        //}
 
         private async Task ControlGradeAsync(IAverageGrade studentInfo)
         {
