@@ -11,7 +11,7 @@ namespace BusinessLogic.Tests
         public void AverageGradeService_GivenNullRepository_ThrowArgumentNullException()
         {
             // Act
-            Action repositoryNull = () => new AverageGradeService(null);
+            Action repositoryNull = () => new AverageGradeServiceAsync(null);
 
             // Assert
             Assert.That(repositoryNull, Throws.Exception.TypeOf<ArgumentNullException>());

@@ -13,15 +13,12 @@ namespace M10_RestApi.Controllers
     [Route("/api/education/averagegrade")]
     public class StudentAverageGradeController : ControllerBase
     {
-        // private readonly IAverageGradeService<IAverageGrade> _entityService;
         private readonly IAverageGradeServiceAsync<IAverageGrade> _entityServiceAsync;
         private readonly IMapper _mapper;
 
-        public StudentAverageGradeController(IMapper mapper/*, IAverageGradeService<IAverageGrade> entityService*/, IAverageGradeServiceAsync<IAverageGrade> entityServiceAsync)
+        public StudentAverageGradeController(IMapper mapper, IAverageGradeServiceAsync<IAverageGrade> entityServiceAsync)
         {
             _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
-
-            // _entityService = entityService ?? throw new System.ArgumentNullException(nameof(entityService));
             _entityServiceAsync = entityServiceAsync ?? throw new System.ArgumentNullException(nameof(entityServiceAsync));
         }
 
