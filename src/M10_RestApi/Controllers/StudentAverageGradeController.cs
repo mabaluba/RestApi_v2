@@ -33,8 +33,8 @@ namespace M10_RestApi.Controllers
         public async Task<ActionResult<IEnumerable<AverageGradeDto>>> GetAverageGradesAsync()
         {
             var studentsAG = await _entityServiceAsync.GetAllEntitiesAsync();
-
-            return studentsAG.Count == 0 ? NotFound($"Students not found.") : Ok(studentsAG.Select(i => _mapper.Map<AverageGradeDto>(i)));
+            var result = studentsAG.Select(i => _mapper.Map<AverageGradeDto>(i));
+            return studentsAG.Count == 0 ? NotFound($"Students not found.") : Ok(result);
         }
     }
 }
