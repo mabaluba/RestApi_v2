@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using BusinessLogic.ReportServices;
 using M10_RestApi.ModelsDto;
@@ -29,23 +30,19 @@ namespace M10_RestApi.Controllers
         }
 
         [HttpGet("byLecture/{lectureTopic}")]
-        public ActionResult<IReadOnlyCollection<AttendanceDto>> GetAttendencesByTopic(string lectureTopic)
+        public async Task<ActionResult<IReadOnlyCollection<AttendanceDto>>> GetAttendencesByTopicAsync(string lectureTopic)
         {
-            var result = _reportService
-                .GetAttendencesByLectureTopic(lectureTopic)
-                .Select(i => _mapper.Map<AttendanceDto>(i))
-                .ToArray();
-            _logger.LogInformation($"Requested attendance report for lecture topic '{lectureTopic}'.");
-            return result.Length == 0 ? NotFound($"There is no attendances with lecture topic '{lectureTopic}'.") : result;
+            var ttendences = await _reportService.GetAttendencesByLectureTopicAsync(lectureTopic);
+            var result = ttendences.Select(i => _mapper.Map<AttendanceDto>(i)).ToArray();
+            _logger.LogInformation($"Requested attendance report with lecture topic '{lectureTopic}'.");
+            return result.Length == 0 ? NotFound($"There is no attendances with lecture topic '{lectureTopic}'.") : Ok(result);
         }
 
         [HttpGet("byStudent/{firstName},{lastName}")]
-        public ActionResult<IReadOnlyCollection<AttendanceDto>> GetAttendencesByStudentName(string firstName, string lastName)
+        public async Task<ActionResult<IReadOnlyCollection<AttendanceDto>>> GetAttendencesByStudentNameAsync(string firstName, string lastName)
         {
-            var result = _reportService
-                .GetAttendencesByStudentFistLastName(firstName, lastName)
-                .Select(i => _mapper.Map<AttendanceDto>(i))
-                .ToArray();
+            var attendences = await _reportService.GetAttendencesByStudentFistLastNameAsync(firstName, lastName);
+            var result = attendences.Select(i => _mapper.Map<AttendanceDto>(i)).ToArray();
             _logger.LogInformation($"Requested attendance report for student '{firstName} {lastName}'.");
             return result.Length == 0 ? NotFound($"There is no attendances with student '{firstName} {lastName}'.") : result;
         }
