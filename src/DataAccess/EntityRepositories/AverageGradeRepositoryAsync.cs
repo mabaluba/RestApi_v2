@@ -12,11 +12,11 @@ namespace DataAccess.EntityRepositories
 {
     internal class AverageGradeRepositoryAsync : IAverageGradeRepositoryAsync<IAverageGrade>
     {
-        private readonly ILogger<AverageGradeRepository> _logger;
+        private readonly ILogger<AverageGradeRepositoryAsync> _logger;
         private readonly IMapper _mapper;
         private readonly EducationDbContext _context;
 
-        public AverageGradeRepositoryAsync(EducationDbContext context, IMapper mapper, ILogger<AverageGradeRepository> logger)
+        public AverageGradeRepositoryAsync(EducationDbContext context, IMapper mapper, ILogger<AverageGradeRepositoryAsync> logger)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
