@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using BusinessLogic.EntityServices;
 using BusinessLogic.ReportServices;
 using Microsoft.Extensions.Logging;
@@ -16,14 +17,14 @@ namespace BusinessLogic.Tests
     {
         private readonly string _name = "name";
         private readonly string _nameLast = "nameLast";
-        private Mock<IEntityRepository<IAttendance>> _repositoryService;
+        private Mock<IEntityRepositoryAsync<IAttendance>> _repositoryService;
         private ILogger<AttendanceService> _logger;
         private IAttendance[] _attendances;
 
         [OneTimeSetUp]
         public void Setup()
         {
-            _repositoryService = new Mock<IEntityRepository<IAttendance>>();
+            _repositoryService = new Mock<IEntityRepositoryAsync<IAttendance>>();
             _logger = new Mock<ILogger<AttendanceService>>().Object;
             _attendances = new DataForTests().AttandancesForTests;
         }
@@ -43,11 +44,8 @@ namespace BusinessLogic.Tests
             // Arrange
             AttendanceReportService service = new(_repositoryService.Object, _logger);
 
-            // Act
-            Action topicWithNull = () => service.GetAttendencesByLectureTopic(lectureTopic);
-
             // Assert
-            Assert.That(topicWithNull, Throws.Exception.TypeOf<ArgumentException>());
+            Assert.ThrowsAsync<ArgumentException>(async () => await service.GetAttendencesByLectureTopicAsync(lectureTopic));
         }
 
         [TestCase(null, "name")]
@@ -59,11 +57,8 @@ namespace BusinessLogic.Tests
             // Arrange
             AttendanceReportService service = new(_repositoryService.Object, _logger);
 
-            // Act
-            Action nameWithNull = () => service.GetAttendencesByStudentFistLastName(firstName, lastName);
-
             // Assert
-            Assert.That(nameWithNull, Throws.Exception.TypeOf<ArgumentException>());
+            Assert.ThrowsAsync<ArgumentException>(async () => await service.GetAttendencesByStudentFistLastNameAsync(firstName, lastName));
         }
 
         [Test]
@@ -82,14 +77,14 @@ namespace BusinessLogic.Tests
         }
 
         [Test]
-        public void GetAttendencesByLectureTopic_GivenLectureTopic_ReturnAttandances()
+        public async Task GetAttendencesByLectureTopic_GivenLectureTopic_ReturnAttandances()
         {
             // Arrange
-            _repositoryService.Setup(i => i.GetAllEntities()).Returns(_attendances);
+            _repositoryService.Setup(i => i.GetAllEntitiesAsync()).ReturnsAsync(_attendances);
             var service = new AttendanceReportService(_repositoryService.Object, _logger);
 
             // Act
-            var res = service.GetAttendencesByLectureTopic("LectureTopic");
+            var res = await service.GetAttendencesByLectureTopicAsync("LectureTopic");
 
             // Assert
             Assert.That(res, Is.InstanceOf<IReadOnlyCollection<IAttendance>>());
@@ -98,14 +93,14 @@ namespace BusinessLogic.Tests
         }
 
         [Test]
-        public void GetAttendencesByStudentFistLastName_GivenNames_ReturnAttandances()
+        public async Task GetAttendencesByStudentFistLastName_GivenNames_ReturnAttandances()
         {
             // Arrange
-            _repositoryService.Setup(i => i.GetAllEntities()).Returns(_attendances);
+            _repositoryService.Setup(i => i.GetAllEntitiesAsync()).ReturnsAsync(_attendances);
             var service = new AttendanceReportService(_repositoryService.Object, _logger);
 
             // Act
-            var res = service.GetAttendencesByStudentFistLastName(_name, _nameLast);
+            var res = await service.GetAttendencesByStudentFistLastNameAsync(_name, _nameLast);
 
             // Assert
             Assert.That(res, Is.InstanceOf<IReadOnlyCollection<IAttendance>>());
