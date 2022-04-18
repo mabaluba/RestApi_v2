@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using BusinessLogic.CourseControlServices;
 using BusinessLogic.DomainEntityValidation;
 using BusinessLogic.EntityServices;
@@ -15,7 +16,6 @@ namespace BusinessLogic.Tests
     [TestFixture]
     public class AttendanceServiceTests
     {
-        private Mock<IEntityRepository<IAttendance>> _repositoryService;
         private Mock<IEntityRepositoryAsync<IAttendance>> _repositoryServiceAsync;
         private IControlService _controlService;
         private IEntityValidation _validation;
@@ -24,7 +24,6 @@ namespace BusinessLogic.Tests
         [OneTimeSetUp]
         public void Setup()
         {
-            _repositoryService = new Mock<IEntityRepository<IAttendance>>();
             _repositoryServiceAsync = new Mock<IEntityRepositoryAsync<IAttendance>>();
             _controlService = new Mock<IControlService>().Object;
             _validation = new Mock<IEntityValidation>().Object;
@@ -34,7 +33,6 @@ namespace BusinessLogic.Tests
         [OneTimeTearDown]
         public void TearDown()
         {
-            _repositoryService = null;
             _controlService = null;
             _validation = null;
             _attendances = null;
@@ -45,27 +43,23 @@ namespace BusinessLogic.Tests
         {
             // Arrange
             Attendance attendance = null;
-            AttendanceService service = new(_repositoryService.Object, _controlService, _validation, _repositoryServiceAsync.Object);
-
-            // Act
-            Action createWithNull = () => service.CreateEntity(attendance);
-            Action editWithNull = () => service.EditEntity(attendance);
+            AttendanceService service = new(_controlService, _validation, _repositoryServiceAsync.Object);
 
             // Assert
             Assert.Multiple(() =>
-            {
-                Assert.That(createWithNull, Throws.Exception.TypeOf<ArgumentNullException>());
-                Assert.That(editWithNull, Throws.Exception.TypeOf<ArgumentNullException>());
-            });
+           {
+               Assert.ThrowsAsync<ArgumentNullException>(async () => await service.CreateEntityAsync(attendance));
+               Assert.ThrowsAsync<ArgumentNullException>(async () => await service.EditEntityAsync(attendance));
+           });
         }
 
         [Test]
         public void AttendanceEntity_GivenNullArgs_ThrowArgumentNullException()
         {
             // Act
-            Action repositoryNull = () => new AttendanceService(null, _controlService, _validation, _repositoryServiceAsync.Object);
-            Action controlNull = () => new AttendanceService(_repositoryService.Object, null, _validation, _repositoryServiceAsync.Object);
-            Action validationNull = () => new AttendanceService(_repositoryService.Object, _controlService, null, _repositoryServiceAsync.Object);
+            Action controlNull = () => new AttendanceService(null, _validation, _repositoryServiceAsync.Object);
+            Action validationNull = () => new AttendanceService(_controlService, null, _repositoryServiceAsync.Object);
+            Action repositoryNull = () => new AttendanceService(_controlService, _validation, null);
 
             // Assert
             Assert.Multiple(() =>
@@ -77,14 +71,14 @@ namespace BusinessLogic.Tests
         }
 
         [Test]
-        public void GetAllEntities_ReturnAllAttandancesFromDataForTests()
+        public async Task GetAllEntities_ReturnAllAttandancesFromDataForTests()
         {
             // Arrange
-            _repositoryService.Setup(i => i.GetAllEntities()).Returns(_attendances);
-            var service = new AttendanceService(_repositoryService.Object, _controlService, _validation, _repositoryServiceAsync.Object);
+            _repositoryServiceAsync.Setup(i => i.GetAllEntitiesAsync()).ReturnsAsync(_attendances);
+            var service = new AttendanceService(_controlService, _validation, _repositoryServiceAsync.Object);
 
             // Act
-            var res = service.GetAllEntities();
+            var res = await service.GetAllEntitiesAsync();
 
             // Assert
             Assert.That(res, Is.InstanceOf<IReadOnlyCollection<IAttendance>>());
@@ -93,15 +87,15 @@ namespace BusinessLogic.Tests
         }
 
         [Test]
-        public void GetEntity_GivenId_ReturnAttandancesFromDataForTests()
+        public async Task GetEntity_GivenId_ReturnAttandancesFromDataForTests()
         {
             // Arrange
             var entityId = 2;
-            _repositoryService.Setup(i => i.GetEntity(entityId)).Returns(_attendances.First(i => i.Id == 2));
-            var service = new AttendanceService(_repositoryService.Object, _controlService, _validation, _repositoryServiceAsync.Object);
+            _repositoryServiceAsync.Setup(i => i.GetEntityAsync(entityId)).ReturnsAsync(_attendances.First(i => i.Id == 2));
+            var service = new AttendanceService(_controlService, _validation, _repositoryServiceAsync.Object);
 
             // Act
-            var res = service.GetEntity(entityId);
+            var res = await service.GetEntityAsync(entityId);
 
             // Assert
             Assert.That(res, Is.InstanceOf<IAttendance>());
@@ -109,7 +103,7 @@ namespace BusinessLogic.Tests
         }
 
         [Test]
-        public void CreateEntity_GetEntity_ReturnSavedNewEntity()
+        public async Task CreateEntity_GetEntity_ReturnSavedNewEntity()
         {
             // Arrange
             Attendance entity = new()
@@ -132,11 +126,11 @@ namespace BusinessLogic.Tests
                 HomeworkMark = 0
             };
 
-            _repositoryService.Setup(i => i.CreateEntity(entity)).Returns(entitySaved);
-            var service = new AttendanceService(_repositoryService.Object, _controlService, _validation, _repositoryServiceAsync.Object);
+            _repositoryServiceAsync.Setup(i => i.CreateEntityAsync(entity)).ReturnsAsync(entitySaved);
+            var service = new AttendanceService(_controlService, _validation, _repositoryServiceAsync.Object);
 
             // Act
-            var res = service.CreateEntity(entity);
+            var res = await service.CreateEntityAsync(entity);
 
             // Assert
             Assert.That(res, Is.InstanceOf<IAttendance>());
@@ -144,7 +138,7 @@ namespace BusinessLogic.Tests
         }
 
         [Test]
-        public void EditEntity_GetEntity_ReturnSavedChangesEntity()
+        public async Task EditEntity_GetEntity_ReturnSavedChangesEntity()
         {
             // Arrange
             Attendance entity = new()
@@ -167,11 +161,11 @@ namespace BusinessLogic.Tests
                 HomeworkMark = 5
             };
 
-            _repositoryService.Setup(i => i.EditEntity(entity)).Returns(entitySaved);
-            var service = new AttendanceService(_repositoryService.Object, _controlService, _validation, _repositoryServiceAsync.Object);
+            _repositoryServiceAsync.Setup(i => i.EditEntityAsync(entity)).ReturnsAsync(entitySaved);
+            var service = new AttendanceService(_controlService, _validation, _repositoryServiceAsync.Object);
 
             // Act
-            var res = service.EditEntity(entity);
+            var res = await service.EditEntityAsync(entity);
 
             // Assert
             Assert.That(res, Is.InstanceOf<IAttendance>());
@@ -183,15 +177,12 @@ namespace BusinessLogic.Tests
         {
             // Arrange
             var entityId = It.IsAny<int>();
-            _repositoryService.Setup(i => i.DeleteEntity(entityId));
-            var service = new AttendanceService(_repositoryService.Object, _controlService, _validation, _repositoryServiceAsync.Object);
-
-            // Act
-            Action deletion = () => service.DeleteEntity(entityId);
+            _repositoryServiceAsync.Setup(i => i.DeleteEntityAsync(entityId));
+            var service = new AttendanceService(_controlService, _validation, _repositoryServiceAsync.Object);
 
             // Assert
-            Action deletionInvoked = () => _repositoryService.Verify(i => i.DeleteEntity(entityId), Times.Once);
-            Assert.That(deletion, Throws.Nothing);
+            Action deletionInvoked = () => _repositoryServiceAsync.Verify(i => i.DeleteEntityAsync(entityId), Times.Once);
+            Assert.DoesNotThrowAsync(async () => await service.DeleteEntityAsync(entityId));
             Assert.That(deletionInvoked, Throws.Nothing);
         }
 
@@ -201,15 +192,11 @@ namespace BusinessLogic.Tests
             // Arrange
             var entityId = It.IsAny<int>();
             _repositoryServiceAsync.Setup(i => i.DeleteEntityAsync(entityId));
-            var service = new AttendanceService(_repositoryService.Object, _controlService, _validation, _repositoryServiceAsync.Object);
-
-            // Act
-            Action deletion = () => service.DeleteEntityAsync(entityId).Wait();
+            var service = new AttendanceService(_controlService, _validation, _repositoryServiceAsync.Object);
 
             // Assert
             Action deletionInvoked = () => _repositoryServiceAsync.Verify(i => i.DeleteEntityAsync(entityId), Times.Once);
-            Assert.That(deletion, Throws.Nothing);
-            Assert.That(deletionInvoked, Throws.Nothing);
+            Assert.DoesNotThrowAsync(async () => await service.DeleteEntityAsync(entityId));
         }
     }
 }

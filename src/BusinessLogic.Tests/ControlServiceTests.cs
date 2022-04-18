@@ -68,11 +68,8 @@ namespace BusinessLogic.Tests
                 _repositoryLectureAsync,
                 _repositoryAGR);
 
-            // Act
-            Action attandanceWithNull = async () => await service.ControlStudentAsync(attendance);
-
             // Assert
-            Assert.That(attandanceWithNull, Throws.Exception.TypeOf<ArgumentNullException>());
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await service.ControlStudentAsync(attendance));
         }
 
         [Test]
@@ -80,7 +77,6 @@ namespace BusinessLogic.Tests
         {
             // Act
             Action loggerNull = () => new ControlService(null, _repositoryLecture, _repositoryTeacher, _repositoryAGRasync, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync, _repositoryAGR);
-            Action repositoryAttendanceNull = () => new ControlService(_logger, _repositoryLecture, _repositoryTeacher, _repositoryAGRasync, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync, _repositoryAGR);
             Action repositoryLectureNull = () => new ControlService(_logger, null, _repositoryTeacher, _repositoryAGRasync, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync, _repositoryAGR);
             Action repositoryTeacherNull = () => new ControlService(_logger, _repositoryLecture, null, _repositoryAGRasync, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync, _repositoryAGR);
             Action repositoryAGRNull = () => new ControlService(_logger, _repositoryLecture, _repositoryTeacher, null, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync, _repositoryAGR);
@@ -91,19 +87,15 @@ namespace BusinessLogic.Tests
             Action repositoryOtherNull = () => new ControlService(_logger, _repositoryLecture, _repositoryTeacher, _repositoryAGRasync, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync, null);
 
             // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(loggerNull, Throws.Exception.TypeOf<ArgumentNullException>());
-                Assert.That(repositoryAttendanceNull, Throws.Exception.TypeOf<ArgumentNullException>());
-                Assert.That(repositoryLectureNull, Throws.Exception.TypeOf<ArgumentNullException>());
-                Assert.That(repositoryTeacherNull, Throws.Exception.TypeOf<ArgumentNullException>());
-                Assert.That(repositoryAGRNull, Throws.Exception.TypeOf<ArgumentNullException>());
-                Assert.That(optionsNull, Throws.Exception.TypeOf<ArgumentNullException>());
-                Assert.That(repositoryAttendanceAsyncNull, Throws.Exception.TypeOf<ArgumentNullException>());
-                Assert.That(repositoryTeacherAsyncNull, Throws.Exception.TypeOf<ArgumentNullException>());
-                Assert.That(repositoryLectureAsyncNull, Throws.Exception.TypeOf<ArgumentNullException>());
-                Assert.That(repositoryOtherNull, Throws.Exception.TypeOf<ArgumentNullException>());
-            });
+            Assert.That(loggerNull, Throws.Exception.TypeOf<ArgumentNullException>());
+            Assert.That(repositoryLectureNull, Throws.Exception.TypeOf<ArgumentNullException>());
+            Assert.That(repositoryTeacherNull, Throws.Exception.TypeOf<ArgumentNullException>());
+            Assert.That(repositoryAGRNull, Throws.Exception.TypeOf<ArgumentNullException>());
+            Assert.That(optionsNull, Throws.Exception.TypeOf<ArgumentNullException>());
+            Assert.That(repositoryAttendanceAsyncNull, Throws.Exception.TypeOf<ArgumentNullException>());
+            Assert.That(repositoryTeacherAsyncNull, Throws.Exception.TypeOf<ArgumentNullException>());
+            Assert.That(repositoryLectureAsyncNull, Throws.Exception.TypeOf<ArgumentNullException>());
+            Assert.That(repositoryOtherNull, Throws.Exception.TypeOf<ArgumentNullException>());
         }
     }
 }
