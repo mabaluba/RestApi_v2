@@ -66,7 +66,7 @@ namespace BusinessLogic.Tests
             // Act
             Action loggerNull = () => new ControlService(null, _repositoryAGRasync, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync);
             Action repositoryAGRNull = () => new ControlService(_logger, null, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync);
-            Action optionsNull = () => new ControlService(_logger,_repositoryAGRasync, null, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync);
+            Action optionsNull = () => new ControlService(_logger, _repositoryAGRasync, null, _repositoryAttendanceAsync, _repositoryTeacherAsync, _repositoryLectureAsync);
             Action repositoryAttendanceAsyncNull = () => new ControlService(_logger, _repositoryAGRasync, _options, null, _repositoryTeacherAsync, _repositoryLectureAsync);
             Action repositoryTeacherAsyncNull = () => new ControlService(_logger, _repositoryAGRasync, _options, _repositoryAttendanceAsync, null, _repositoryLectureAsync);
             Action repositoryLectureAsyncNull = () => new ControlService(_logger, _repositoryAGRasync, _options, _repositoryAttendanceAsync, _repositoryTeacherAsync, null);

@@ -27,7 +27,6 @@ namespace DataAccess
                 .AddScoped<IEntityRepositoryAsync<ITeacher>, TeacherRepository>()
                 .AddScoped<IEntityRepository<ILecture>, LectureRepository>()
                 .AddScoped<IEntityRepositoryAsync<ILecture>, LectureRepository>()
-                //.AddScoped<IEntityRepository<IAttendance>, AttendanceRepository>()
                 .AddScoped<IEntityRepositoryAsync<IAttendance>, AttendanceRepository>()
                 .AddScoped<IAverageGradeRepository<IAverageGrade>, AverageGradeRepository>()
                 .AddScoped<IAverageGradeRepositoryAsync<IAverageGrade>, AverageGradeRepositoryAsync>()
