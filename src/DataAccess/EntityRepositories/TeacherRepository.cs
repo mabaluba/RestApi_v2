@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using DataAccess.Models;
@@ -13,7 +12,7 @@ using UniversityDomain.ServiceInterfaces;
 
 namespace DataAccess.EntityRepositories
 {
-    internal class TeacherRepository : IEntityRepository<ITeacher>, IEntityRepositoryAsync<ITeacher>
+    internal class TeacherRepository : IEntityRepositoryAsync<ITeacher>
     {
         private readonly ILogger<TeacherRepository> _logger;
         private readonly IMapper _mapper;
@@ -23,10 +22,10 @@ namespace DataAccess.EntityRepositories
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public ITeacher CreateEntity(ITeacher teacher)
+        public async Task<ITeacher> CreateEntityAsync(ITeacher teacher)
         {
             _ = teacher ?? throw new ArgumentNullException(nameof(teacher));
 
@@ -41,8 +40,8 @@ namespace DataAccess.EntityRepositories
             EntityEntry<TeacherDb> result;
             try
             {
-                result = _context.Teachers?.Add(teacherDb);
-                _context.SaveChanges();
+                result = await _context.Teachers.AddAsync(teacherDb);
+                await _context.SaveChangesAsync();
                 _logger.LogInformation($"Saved member with id = {teacherDb.Id} to database.");
             }
             catch (DbUpdateException exception)
@@ -54,9 +53,9 @@ namespace DataAccess.EntityRepositories
             return _mapper.Map<Teacher>(result?.Entity);
         }
 
-        public ITeacher EditEntity(ITeacher teacher)
+        public async Task<ITeacher> EditEntityAsync(ITeacher teacher)
         {
-            var teacherDb = _context.Teachers?.Find(teacher.Id)
+            var teacherDb = await _context.Teachers.FindAsync(teacher.Id)
                 ?? throw new MissingMemberException($"Cannot find member with Id = {teacher.Id}.");
 
             teacherDb.FirstName = teacher.FirstName;
@@ -66,7 +65,7 @@ namespace DataAccess.EntityRepositories
             try
             {
                 _context.Update(teacherDb);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 _logger.LogInformation($"Saved changes for member with id = {teacherDb.Id} to database.");
             }
             catch (InvalidOperationException exception)
@@ -78,30 +77,14 @@ namespace DataAccess.EntityRepositories
             return _mapper.Map<Teacher>(teacherDb);
         }
 
-        public void DeleteEntity(int teacherId)
+        public async Task DeleteEntityAsync(int teacherId)
         {
-            var teacherDb = _context.Teachers?.Find(teacherId)
+            var teacherDb = await _context.Teachers.FindAsync(teacherId)
                 ?? throw new MissingMemberException($"Cannot find member with Id = {teacherId}.");
 
             _context.Teachers.Remove(teacherDb);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             _logger.LogInformation($"Delete member with id = {teacherId} from database.");
-        }
-
-        public IReadOnlyCollection<ITeacher> GetAllEntities()
-        {
-            var teachers = _context.Teachers?.ToArray() ?? throw new ArgumentNullException();
-            _ = teachers.Length == 0 ? throw new MissingMemberException($"Cannot find any {typeof(Teacher).Name} members.") : 0;
-            _logger.LogInformation($"Get all members {typeof(Teacher).Name} from database.");
-            return _mapper.Map<IReadOnlyCollection<Teacher>>(teachers);
-        }
-
-        public ITeacher GetEntity(int teacherId)
-        {
-            var teacherDb = _context.Teachers?.Find(teacherId) ?? throw new MissingMemberException($"Cannot find member with Id = {teacherId}.");
-
-            _logger.LogInformation($"Get member with id = {teacherId} from database.");
-            return _mapper.Map<Teacher>(teacherDb);
         }
 
         public async Task<ITeacher> GetEntityAsync(int teacherId)
@@ -118,21 +101,6 @@ namespace DataAccess.EntityRepositories
             teachers = teachers.Length == 0 ? throw new MissingMemberException($"Cannot find any {typeof(Teacher).Name} members.") : teachers;
             _logger.LogInformation($"Get all members {typeof(Teacher).Name} from database.");
             return _mapper.Map<IReadOnlyCollection<Teacher>>(teachers);
-        }
-
-        public Task<ITeacher> CreateEntityAsync(ITeacher attendance)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteEntityAsync(int attendanceId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ITeacher> EditEntityAsync(ITeacher attendance)
-        {
-            throw new NotImplementedException();
         }
     }
 }

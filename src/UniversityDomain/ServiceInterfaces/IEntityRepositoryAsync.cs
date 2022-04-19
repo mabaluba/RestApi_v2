@@ -7,14 +7,14 @@ namespace UniversityDomain.ServiceInterfaces
     public interface IEntityRepositoryAsync<T>
         where T : IEntity
     {
-        Task<T> CreateEntityAsync(T attendance);
+        Task<T> CreateEntityAsync(T entity);
 
-        Task DeleteEntityAsync(int attendanceId);
+        Task DeleteEntityAsync(int entity);
 
-        Task<T> GetEntityAsync(int attendanceId);
+        Task<T> GetEntityAsync(int entityId);
 
         Task<IReadOnlyCollection<T>> GetAllEntitiesAsync();
 
-        Task<T> EditEntityAsync(T attendance);
+        Task<T> EditEntityAsync(T entity);
     }
 }

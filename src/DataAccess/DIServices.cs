@@ -23,7 +23,6 @@ namespace DataAccess
 
                 .AddSingleton<IDbInitializer, DbInitializer>()
                 .AddScoped<IEntityRepository<IStudent>, StudentRepository>()
-                .AddScoped<IEntityRepository<ITeacher>, TeacherRepository>()
                 .AddScoped<IEntityRepositoryAsync<ITeacher>, TeacherRepository>()
                 .AddScoped<IEntityRepositoryAsync<ILecture>, LectureRepository>()
                 .AddScoped<IEntityRepositoryAsync<IAttendance>, AttendanceRepository>()
