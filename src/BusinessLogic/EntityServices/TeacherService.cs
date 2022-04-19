@@ -1,44 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using BusinessLogic.DomainEntityValidation;
 using UniversityDomain.EntityInterfaces;
 using UniversityDomain.ServiceInterfaces;
 
 namespace BusinessLogic.EntityServices
 {
-    public class TeacherService : IEntityService<ITeacher>
+    public class TeacherService : IEntityServiceAsync<ITeacher>
     {
-        private readonly IEntityRepository<ITeacher> _repository;
+        private readonly IEntityRepositoryAsync<ITeacher> _repository;
         private readonly IEntityValidation _validation;
 
-        public TeacherService(IEntityRepository<ITeacher> repository, IEntityValidation validation)
+        public TeacherService(IEntityRepositoryAsync<ITeacher> repository, IEntityValidation validation)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _validation = validation ?? throw new ArgumentNullException(nameof(validation));
         }
 
-        public ITeacher CreateEntity(ITeacher entity)
+        public async Task<ITeacher> CreateEntityAsync(ITeacher entity)
         {
             _ = entity ?? throw new ArgumentNullException(nameof(entity));
 
             _validation.Validate(entity);
 
-            return _repository.CreateEntity(entity);
+            return await _repository.CreateEntityAsync(entity);
         }
 
-        public ITeacher EditEntity(ITeacher entity)
+        public async Task<ITeacher> EditEntityAsync(ITeacher entity)
         {
             _ = entity ?? throw new ArgumentNullException(nameof(entity));
 
             _validation.Validate(entity);
 
-            return _repository.EditEntity(entity);
+            return await _repository.EditEntityAsync(entity);
         }
 
-        public IReadOnlyCollection<ITeacher> GetAllEntities() => _repository.GetAllEntities();
+        public async Task<IReadOnlyCollection<ITeacher>> GetAllEntitiesAsync() => await _repository.GetAllEntitiesAsync();
 
-        public ITeacher GetEntity(int entityId) => _repository.GetEntity(entityId);
+        public async Task<ITeacher> GetEntityAsync(int entityId) => await _repository.GetEntityAsync(entityId);
 
-        public void DeleteEntity(int entityId) => _repository.DeleteEntity(entityId);
+        public async Task DeleteEntityAsync(int entityId) => await _repository.DeleteEntityAsync(entityId);
     }
 }

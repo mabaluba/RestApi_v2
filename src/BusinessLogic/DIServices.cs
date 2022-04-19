@@ -14,7 +14,7 @@ namespace BusinessLogic
         {
             return services
                 .AddScoped<IEntityService<IStudent>, StudentService>()
-                .AddScoped<IEntityService<ITeacher>, TeacherService>()
+                .AddScoped<IEntityServiceAsync<ITeacher>, TeacherService>()
                 .AddScoped<IEntityServiceAsync<IAttendance>, AttendanceService>()
                 .AddScoped<IEntityServiceAsync<ILecture>, LectureService>()
                 .AddScoped<IAverageGradeServiceAsync<IAverageGrade>, AverageGradeServiceAsync>()
