@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using BusinessLogic.EntityServices;
 using M10_RestApi.ModelsDto;
 using Microsoft.AspNetCore.Mvc;
 using UniversityDomain.DomainEntites;
 using UniversityDomain.EntityInterfaces;
+using UniversityDomain.ServiceInterfaces;
 
 namespace M10_RestApi.Controllers
 {

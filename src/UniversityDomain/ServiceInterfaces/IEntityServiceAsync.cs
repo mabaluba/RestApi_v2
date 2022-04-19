@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using UniversityDomain.EntityInterfaces;
 
-namespace BusinessLogic.EntityServices
+namespace UniversityDomain.ServiceInterfaces
 {
     public interface IEntityServiceAsync<T>
         where T : IEntity
