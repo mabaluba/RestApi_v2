@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +12,7 @@ using UniversityDomain.ServiceInterfaces;
 
 namespace DataAccess.EntityRepositories
 {
-    internal class StudentRepository : IEntityRepository<IStudent>
+    internal class StudentRepository : IEntityRepositoryAsync<IStudent>
     {
         private readonly ILogger<StudentRepository> _logger;
         private readonly IMapper _mapper;
@@ -25,7 +25,7 @@ namespace DataAccess.EntityRepositories
             _logger = logger;
         }
 
-        public IStudent CreateEntity(IStudent student)
+        public async Task<IStudent> CreateEntityAsync(IStudent student)
         {
             _ = student ?? throw new ArgumentNullException(nameof(student));
 
@@ -40,8 +40,8 @@ namespace DataAccess.EntityRepositories
             EntityEntry<StudentDb> result;
             try
             {
-                result = _context.Students?.Add(studentDb);
-                _context.SaveChanges();
+                result = await _context.Students.AddAsync(studentDb);
+                await _context.SaveChangesAsync();
                 _logger.LogInformation($"Saved member with id = {studentDb.Id} to database.");
             }
             catch (DbUpdateException exception)
@@ -53,9 +53,9 @@ namespace DataAccess.EntityRepositories
             return _mapper.Map<Student>(result.Entity);
         }
 
-        public IStudent EditEntity(IStudent student)
+        public async Task<IStudent> EditEntityAsync(IStudent student)
         {
-            var studentDb = _context.Students?.Find(student.Id) ?? throw new MissingMemberException($"Cannot find member with Id = {student.Id}.");
+            var studentDb = await _context.Students.FindAsync(student.Id) ?? throw new MissingMemberException($"Cannot find member with Id = {student.Id}.");
 
             studentDb.FirstName = student.FirstName;
             studentDb.LastName = student.LastName;
@@ -64,7 +64,7 @@ namespace DataAccess.EntityRepositories
             try
             {
                 _context.Update(studentDb);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 _logger.LogInformation($"Saved changes for member with id = {studentDb.Id} to database.");
             }
             catch (InvalidOperationException exception)
@@ -76,27 +76,27 @@ namespace DataAccess.EntityRepositories
             return _mapper.Map<Student>(studentDb);
         }
 
-        public void DeleteEntity(int studentId)
+        public async Task DeleteEntityAsync(int studentId)
         {
-            var studentDb = _context.Students?.Find(studentId) ?? throw new MissingMemberException($"Cannot find member with Id = {studentId}.");
+            var studentDb = await _context.Students.FindAsync(studentId) ?? throw new MissingMemberException($"Cannot find member with Id = {studentId}.");
 
             _context.Students.Remove(studentDb);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             _logger.LogInformation($"Delete member with id = {studentId} from database.");
         }
 
-        public IReadOnlyCollection<IStudent> GetAllEntities()
+        public async Task<IReadOnlyCollection<IStudent>> GetAllEntitiesAsync()
         {
-            var students = _context.Students?.ToArray() ?? throw new ArgumentNullException();
+            var students = await _context.Students?.ToArrayAsync();
             _ = students.Length == 0 ? throw new MissingMemberException($"Cannot find any {typeof(Student).Name} members.") : 0;
 
             _logger.LogInformation($"Get all members {typeof(Student).Name} from database.");
             return _mapper.Map<IReadOnlyCollection<Student>>(students);
         }
 
-        public IStudent GetEntity(int studentId)
+        public async Task<IStudent> GetEntityAsync(int studentId)
         {
-            var studentDb = _context.Students?.Find(studentId) ?? throw new MissingMemberException($"Cannot find member with Id = {studentId}.");
+            var studentDb = await _context.Students.FindAsync(studentId) ?? throw new MissingMemberException($"Cannot find member with Id = {studentId}.");
 
             _logger.LogInformation($"Get member with id = {studentId} from database.");
             return _mapper.Map<Student>(studentDb);
