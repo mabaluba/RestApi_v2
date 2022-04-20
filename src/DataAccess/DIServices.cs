@@ -22,7 +22,7 @@ namespace DataAccess
                     options => options.UseNpgsql(connectionString))
 
                 .AddSingleton<IDbInitializer, DbInitializer>()
-                .AddScoped<IEntityRepository<IStudent>, StudentRepository>()
+                .AddScoped<IEntityRepositoryAsync<IStudent>, StudentRepository>()
                 .AddScoped<IEntityRepositoryAsync<ITeacher>, TeacherRepository>()
                 .AddScoped<IEntityRepositoryAsync<ILecture>, LectureRepository>()
                 .AddScoped<IEntityRepositoryAsync<IAttendance>, AttendanceRepository>()
