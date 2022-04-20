@@ -1,44 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using BusinessLogic.DomainEntityValidation;
 using UniversityDomain.EntityInterfaces;
 using UniversityDomain.ServiceInterfaces;
 
 namespace BusinessLogic.EntityServices
 {
-    public class StudentService : IEntityService<IStudent>
+    public class StudentService : IEntityServiceAsync<IStudent>
     {
-        private readonly IEntityRepository<IStudent> _repository;
+        private readonly IEntityRepositoryAsync<IStudent> _repository;
         private readonly IEntityValidation _validation;
 
-        public StudentService(IEntityRepository<IStudent> repository, IEntityValidation validation)
+        public StudentService(IEntityRepositoryAsync<IStudent> repository, IEntityValidation validation)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _validation = validation ?? throw new ArgumentNullException(nameof(validation));
         }
 
-        public IStudent CreateEntity(IStudent entity)
+        public async Task<IStudent> CreateEntityAsync(IStudent entity)
         {
             _ = entity ?? throw new ArgumentNullException(nameof(entity));
 
             _validation.Validate(entity);
 
-            return _repository.CreateEntity(entity);
+            return await _repository.CreateEntityAsync(entity);
         }
 
-        public IStudent EditEntity(IStudent entity)
+        public async Task<IStudent> EditEntityAsync(IStudent entity)
         {
             _ = entity ?? throw new ArgumentNullException(nameof(entity));
 
             _validation.Validate(entity);
 
-            return _repository.EditEntity(entity);
+            return await _repository.EditEntityAsync(entity);
         }
 
-        public IReadOnlyCollection<IStudent> GetAllEntities() => _repository.GetAllEntities();
+        public async Task<IReadOnlyCollection<IStudent>> GetAllEntitiesAsync() => await _repository.GetAllEntitiesAsync();
 
-        public IStudent GetEntity(int entityId) => _repository.GetEntity(entityId);
+        public async Task<IStudent> GetEntityAsync(int entityId) => await _repository.GetEntityAsync(entityId);
 
-        public void DeleteEntity(int entityId) => _repository.DeleteEntity(entityId);
+        public async Task DeleteEntityAsync(int entityId) => await _repository.DeleteEntityAsync(entityId);
     }
 }

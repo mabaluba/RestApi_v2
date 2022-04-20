@@ -13,7 +13,7 @@ namespace BusinessLogic
         public static IServiceCollection AddBusinessLogic(this IServiceCollection services)
         {
             return services
-                .AddScoped<IEntityService<IStudent>, StudentService>()
+                .AddScoped<IEntityServiceAsync<IStudent>, StudentService>()
                 .AddScoped<IEntityServiceAsync<ITeacher>, TeacherService>()
                 .AddScoped<IEntityServiceAsync<IAttendance>, AttendanceService>()
                 .AddScoped<IEntityServiceAsync<ILecture>, LectureService>()
