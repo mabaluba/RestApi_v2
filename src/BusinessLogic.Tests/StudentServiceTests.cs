@@ -12,13 +12,13 @@ namespace BusinessLogic.Tests
     [TestFixture]
     public class StudentServiceTests
     {
-        private IEntityRepository<IStudent> _repositoryService;
+        private IEntityRepositoryAsync<IStudent> _repositoryService;
         private IEntityValidation _validation;
 
         [OneTimeSetUp]
         public void Setup()
         {
-            _repositoryService = new Mock<IEntityRepository<IStudent>>().Object;
+            _repositoryService = new Mock<IEntityRepositoryAsync<IStudent>>().Object;
             _validation = new Mock<IEntityValidation>().Object;
         }
 
@@ -30,21 +30,17 @@ namespace BusinessLogic.Tests
         }
 
         [Test]
-        public void CreateAndEditEntity_GivenNullAttendence_ThrowArgumentNullException()
+        public void CreateAndEditEntityAsync_GivenNullAttendence_ThrowArgumentNullException()
         {
             // Arrange
             Student student = null;
             StudentService service = new(_repositoryService, _validation);
 
-            // Act
-            Action createWithNull = () => service.CreateEntity(student);
-            Action editWithNull = () => service.EditEntity(student);
-
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(createWithNull, Throws.Exception.TypeOf<ArgumentNullException>());
-                Assert.That(editWithNull, Throws.Exception.TypeOf<ArgumentNullException>());
+                Assert.ThrowsAsync<ArgumentNullException>(async () => await service.CreateEntityAsync(student));
+                Assert.ThrowsAsync<ArgumentNullException>(async () => await service.EditEntityAsync(student));
             });
         }
 
