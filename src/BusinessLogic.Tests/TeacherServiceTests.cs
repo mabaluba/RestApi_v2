@@ -12,13 +12,13 @@ namespace BusinessLogic.Tests
     [TestFixture]
     public class TeacherServiceTests
     {
-        private IEntityRepository<ITeacher> _repositoryService;
+        private IEntityRepositoryAsync<ITeacher> _repositoryService;
         private IEntityValidation _validation;
 
         [OneTimeSetUp]
         public void Setup()
         {
-            _repositoryService = new Mock<IEntityRepository<ITeacher>>().Object;
+            _repositoryService = new Mock<IEntityRepositoryAsync<ITeacher>>().Object;
             _validation = new Mock<IEntityValidation>().Object;
         }
 
@@ -30,26 +30,22 @@ namespace BusinessLogic.Tests
         }
 
         [Test]
-        public void CreateAndEditEntity_GivenNullAttendence_ThrowArgumentNullException()
+        public void CreateAndEditEntityAsync_GivenNullAttendence_ThrowArgumentNullException()
         {
             // Arrange
             Teacher teacher = null;
             TeacherService service = new(_repositoryService, _validation);
 
-            // Act
-            Action createWithNull = () => service.CreateEntity(teacher);
-            Action editWithNull = () => service.EditEntity(teacher);
-
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(createWithNull, Throws.Exception.TypeOf<ArgumentNullException>());
-                Assert.That(editWithNull, Throws.Exception.TypeOf<ArgumentNullException>());
+                Assert.ThrowsAsync<ArgumentNullException>(async () => await service.CreateEntityAsync(teacher));
+                Assert.ThrowsAsync<ArgumentNullException>(async () => await service.EditEntityAsync(teacher));
             });
         }
 
         [Test]
-        public void AttendanceEntity_GivenNullArgs_ThrowArgumentNullException()
+        public void AttendanceEntityAsync_GivenNullArgs_ThrowArgumentNullException()
         {
             // Act
             Action repositoryNull = () => new TeacherService(null, _validation);
