@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using M10_RestApi.ModelsDto;
 using Microsoft.AspNetCore.Mvc;
@@ -13,53 +14,53 @@ namespace M10_RestApi.Controllers
     [Route("/api/education/student")]
     public class StudentController : ControllerBase
     {
-        private readonly IEntityService<IStudent> _entityService;
+        private readonly IEntityServiceAsync<IStudent> _entityService;
         private readonly IMapper _mapper;
 
-        public StudentController(IMapper mapper, IEntityService<IStudent> entityService)
+        public StudentController(IMapper mapper, IEntityServiceAsync<IStudent> entityService)
         {
             _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
             _entityService = entityService ?? throw new System.ArgumentNullException(nameof(entityService));
         }
 
         [HttpGet("{id}")]
-        public ActionResult<StudentDto> GetStudent(int id)
+        public async Task<ActionResult<StudentDto>> GetStudentAsync(int id)
         {
-            var student = _entityService.GetEntity(id);
-            return student == null ? NotFound($"Student with Id = '{id}' not found.") : _mapper.Map<StudentDto>(student);
+            var student = await _entityService.GetEntityAsync(id);
+            return student == null ? NotFound($"Student with Id = '{id}' not found.") : Ok(_mapper.Map<StudentDto>(student));
         }
 
         [HttpGet("students")]
-        public ActionResult<IReadOnlyCollection<StudentDto>> GetStudents()
+        public async Task<ActionResult<IEnumerable<StudentDto>>> GetStudentsAsync()
         {
-            var students = _entityService.GetAllEntities().Select(i => _mapper.Map<StudentDto>(i)).ToArray();
-            return students.Length == 0 ? NotFound($"Students not found.") : students;
+            var students = await _entityService.GetAllEntitiesAsync();
+            return students.Count == 0 ? NotFound($"Students not found.") : Ok(students.Select(i => _mapper.Map<StudentDto>(i)));
         }
 
         [HttpPost]
-        public ActionResult CreateStudent(StudentPostDto student)
+        public async Task<ActionResult> CreateStudentAsync(StudentPostDto student)
         {
-            var newStudent = _entityService.CreateEntity(_mapper.Map<Student>(student));
+            var newStudent = await _entityService.CreateEntityAsync(_mapper.Map<Student>(student));
             return Ok($"/api/education/student/{newStudent.Id}");
         }
 
         [HttpPut("{id}")]
-        public ActionResult EditStudent(int id, StudentDto student)
+        public async Task<ActionResult> EditStudentAsync(int id, StudentDto student)
         {
             if (id != student.Id)
             {
                 return BadRequest($"Requested Id = {id}, but given Id = {student.Id}");
             }
 
-            _entityService.EditEntity(_mapper.Map<Student>(student));
+            await _entityService.EditEntityAsync(_mapper.Map<Student>(student));
             return Ok($"/api/education/student/{student.Id}");
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteStudent(int id)
+        public async Task<ActionResult> DeleteStudentAsync(int id)
         {
-            _entityService.DeleteEntity(id);
-            return Ok();
+            await _entityService.DeleteEntityAsync(id);
+            return NoContent();
         }
     }
 }
