@@ -15,12 +15,12 @@ namespace M10_RestApi.Tests.IntegrationTests
         private HttpClient _client;
 
         // For Benchmark
-        public AttendanceControllerIntegrationTests()
-        {
-            _client = new CustomWebApplicationFactory<Startup>().CreateClient();
-            _client.BaseAddress = new System.Uri(_client.BaseAddress, _url);
-        }
-
+        // public AttendanceControllerIntegrationTests()
+        // {
+        //    _client = new CustomWebApplicationFactory<Startup>().CreateClient();
+        //    _client.BaseAddress = new System.Uri(_client.BaseAddress, _url);
+        // }
+        //
         [SetUp]
         public void SetUp()
         {
@@ -130,6 +130,7 @@ namespace M10_RestApi.Tests.IntegrationTests
         [TestCaseSource(nameof(notValidAttendancesPost))]
         public async Task CreateAttendanceAsync_GivenNotValidAttendanceDtoModel_ResponseNotFound(AttendancePostDto attendance)
         {
+            // Arrang
             var attendanceDto = JsonSerializer.Serialize(attendance);
             var content = new StringContent(attendanceDto, Encoding.UTF8, "application/json");
 

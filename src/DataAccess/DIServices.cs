@@ -18,8 +18,7 @@ namespace DataAccess
                 // .AddDbContext<EducationDbContext>(
                 //    options => options.UseSqlServer(connectionString), ServiceLifetime.Scoped)
                 //
-                .AddDbContext<EducationDbContext>(
-                    options => options.UseNpgsql(connectionString))
+                .AddDbContext<EducationDbContext>(options => options.UseNpgsql(connectionString))
 
                 .AddSingleton<IDbInitializer, DbInitializer>()
                 .AddScoped<IEntityRepositoryAsync<IStudent>, StudentRepository>()
