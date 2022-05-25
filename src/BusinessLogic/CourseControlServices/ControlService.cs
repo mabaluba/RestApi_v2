@@ -20,12 +20,12 @@ namespace BusinessLogic.CourseControlServices
         private readonly IEntityRepositoryAsync<ITeacher> _repositoryTeacherAsync;
         private readonly IEntityRepositoryAsync<ILecture> _repositoryLectureAsync;
         private readonly IAverageGradeRepositoryAsync<IAverageGrade> _repositoryAGRasync;
-        private readonly IOptions<EducationMailContacts> _options;
+        private readonly IOptionsMonitor<EducationMailContacts> _options;
 
         public ControlService(
             ILogger<ControlService> logger,
             IAverageGradeRepositoryAsync<IAverageGrade> repositoryAGRasync,
-            IOptions<EducationMailContacts> options,
+            IOptionsMonitor<EducationMailContacts> options,
             IEntityRepositoryAsync<IAttendance> repositoryAttendanceAsync,
             IEntityRepositoryAsync<ITeacher> repositoryTeacherAsync,
             IEntityRepositoryAsync<ILecture> repositoryLectureAsync)

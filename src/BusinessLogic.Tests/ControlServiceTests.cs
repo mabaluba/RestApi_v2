@@ -16,7 +16,7 @@ namespace BusinessLogic.Tests
     {
         private ILogger<ControlService> _logger;
         private IAverageGradeRepositoryAsync<IAverageGrade> _repositoryAGRasync;
-        private IOptions<EducationMailContacts> _options;
+        private IOptionsMonitor<EducationMailContacts> _options;
         private IEntityRepositoryAsync<IAttendance> _repositoryAttendanceAsync;
         private IEntityRepositoryAsync<ITeacher> _repositoryTeacherAsync;
         private IEntityRepositoryAsync<ILecture> _repositoryLectureAsync;
@@ -26,7 +26,7 @@ namespace BusinessLogic.Tests
         {
             _logger = new Mock<ILogger<ControlService>>().Object;
             _repositoryAGRasync = new Mock<IAverageGradeRepositoryAsync<IAverageGrade>>().Object;
-            _options = new Mock<IOptions<EducationMailContacts>>().Object;
+            _options = new Mock<IOptionsMonitor<EducationMailContacts>>().Object;
             _repositoryAttendanceAsync = new Mock<IEntityRepositoryAsync<IAttendance>>().Object;
             _repositoryTeacherAsync = new Mock<IEntityRepositoryAsync<ITeacher>>().Object;
             _repositoryLectureAsync = new Mock<IEntityRepositoryAsync<ILecture>>().Object;

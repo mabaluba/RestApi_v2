@@ -12,9 +12,9 @@ namespace BusinessLogic.NotivicationServices
     {
         private readonly EducationMailContacts _options;
 
-        public SendEmailService(IOptions<EducationMailContacts> options)
+        public SendEmailService(IOptionsMonitor<EducationMailContacts> options)
         {
-            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+            _options = options.CurrentValue ?? throw new ArgumentNullException(nameof(options));
         }
 
         public async Task SendEmailAsync(IAverageGrade studentInfo, ITeacher teacher, int attendanceCount)
