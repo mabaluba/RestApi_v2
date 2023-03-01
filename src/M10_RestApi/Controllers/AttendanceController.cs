@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -23,11 +24,12 @@ namespace M10_RestApi.Controllers
             IEntityServiceAsync<IAttendance> entityServiceAsync)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _entityServiceAsync = entityServiceAsync;
+            _entityServiceAsync = entityServiceAsync ?? throw new ArgumentNullException(nameof(entityServiceAsync));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<AttendanceDto>> GetAttendanceAsync(int id)
+        public async Task<ActionResult<AttendanceDto>> GetAttendanceAsync(
+            [Range(1, int.MaxValue, ErrorMessage = "Please enter valid integer Number")] int id)
         {
             var attendance = await _entityServiceAsync.GetEntityAsync(id);
             return attendance == null
@@ -46,14 +48,16 @@ namespace M10_RestApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateAttendanceAsync(AttendancePostDto newAttendance)
+        public async Task<ActionResult> CreateAttendanceAsync([FromBody] AttendancePostDto newAttendance)
         {
             var attendance = await _entityServiceAsync.CreateEntityAsync(_mapper.Map<Attendance>(newAttendance));
             return Created($"/api/education/attendance/{attendance.Id}", attendance);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> EditAttendanceAsync(int id, AttendanceDto attendance)
+        public async Task<ActionResult> EditAttendanceAsync(
+            [Range(1, int.MaxValue, ErrorMessage = "Please enter valid integer Number")] int id,
+            [FromBody] AttendanceDto attendance)
         {
             if (id != attendance.Id)
             {
@@ -65,7 +69,8 @@ namespace M10_RestApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteAttendanceAsync(int id)
+        public async Task<ActionResult> DeleteAttendanceAsync(
+            [Range(1, int.MaxValue, ErrorMessage = "Please enter valid integer Number")] int id)
         {
             await _entityServiceAsync.DeleteEntityAsync(id);
             return NoContent();
