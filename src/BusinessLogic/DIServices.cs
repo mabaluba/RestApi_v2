@@ -13,14 +13,14 @@ namespace BusinessLogic
         public static IServiceCollection AddBusinessLogic(this IServiceCollection services)
         {
             return services
-                .AddScoped<IEntityServiceAsync<IStudent>, StudentService>()
-                .AddScoped<IEntityServiceAsync<ITeacher>, TeacherService>()
-                .AddScoped<IEntityServiceAsync<IAttendance>, AttendanceService>()
-                .AddScoped<IEntityServiceAsync<ILecture>, LectureService>()
-                .AddScoped<IAverageGradeServiceAsync<IAverageGrade>, AverageGradeServiceAsync>()
-                .AddScoped<IAttandanceReportService<IAttendance>, AttendanceReportService>()
-                .AddScoped<IControlService, ControlService>()
-                .AddScoped<IEntityValidation, EntityValidation>()
+                    .AddScoped<IEntityServiceAsync<IStudent>, StudentService>()
+                    .AddScoped<IEntityServiceAsync<ITeacher>, TeacherService>()
+                    .AddScoped<IEntityServiceAsync<IAttendance>, AttendanceService>()
+                    .AddScoped<IEntityServiceAsync<ILecture>, LectureService>()
+                    .AddScoped<IAverageGradeServiceAsync<IAverageGrade>, AverageGradeServiceAsync>()
+                    .AddScoped<IAttandanceReportService<IAttendance>, AttendanceReportService>()
+                    .AddScoped<IControlService, ControlService>()
+                    .AddScoped<IEntityValidation, EntityValidation>()
                 ;
         }
     }

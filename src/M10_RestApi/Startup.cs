@@ -1,6 +1,7 @@
 using BusinessLogic;
 using BusinessLogic.NotivicationServices;
 using DataAccess;
+using AutoMapper;
 using FluentValidation.AspNetCore;
 using M10_RestApi.ExceptionMiddleware;
 using M10_RestApi.ModelsDto;
@@ -17,10 +18,7 @@ namespace M10_RestApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration) => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
@@ -37,11 +35,9 @@ namespace M10_RestApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "M10_RestApi", Version = "v1" });
             });
 
-            services
-                .AddBusinessLogic();
+            services.AddBusinessLogic();
 
             services
-
                 // .AddDataAccessServices(Configuration.GetConnectionString("MSSqlEducationDb"));
                 .AddDataAccessServices(Configuration.GetConnectionString("PostgreEducationDb"));
 

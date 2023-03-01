@@ -20,13 +20,12 @@ namespace M10_RestApi.Tests
             builder.ConfigureServices(services =>
             {
                 var descriptor = services.SingleOrDefault(d =>
-                d.ServiceType == typeof(DbContextOptions<EducationDbContext>));
+                    d.ServiceType == typeof(DbContextOptions<EducationDbContext>));
 
                 services.Remove(descriptor);
 
                 services.AddDbContext<EducationDbContext>(
-                    options =>
-                    options.UseInMemoryDatabase("InMemoryDatabase")
+                    options => options.UseInMemoryDatabase("InMemoryDatabase")
                 );
 
                 var sp = services.BuildServiceProvider();

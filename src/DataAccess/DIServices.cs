@@ -19,14 +19,13 @@ namespace DataAccess
                 //    options => options.UseSqlServer(connectionString), ServiceLifetime.Scoped)
                 //
                 .AddDbContext<EducationDbContext>(options => options.UseNpgsql(connectionString))
-
                 .AddSingleton<IDbInitializer, DbInitializer>()
                 .AddScoped<IEntityRepositoryAsync<IStudent>, StudentRepository>()
                 .AddScoped<IEntityRepositoryAsync<ITeacher>, TeacherRepository>()
                 .AddScoped<IEntityRepositoryAsync<ILecture>, LectureRepository>()
                 .AddScoped<IEntityRepositoryAsync<IAttendance>, AttendanceRepository>()
-                .AddScoped<IAverageGradeRepositoryAsync<IAverageGrade>, AverageGradeRepositoryAsync>()
-                ;
+                .AddScoped<IAverageGradeRepositoryAsync<IAverageGrade>, AverageGradeRepositoryAsync>();
+
             return services;
         }
     }
