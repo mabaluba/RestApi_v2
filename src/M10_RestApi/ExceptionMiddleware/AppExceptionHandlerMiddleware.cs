@@ -12,6 +12,7 @@ namespace M10_RestApi.ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<AppExceptionHandlerMiddleware> _logger;
+
         public AppExceptionHandlerMiddleware(RequestDelegate next, ILogger<AppExceptionHandlerMiddleware> logger)
         {
             _next = next;

@@ -9,7 +9,7 @@ namespace UniversityDomain.ServiceInterfaces
     {
         Task<T> CreateEntityAsync(T entity);
 
-        Task DeleteEntityAsync(int entity);
+        Task DeleteEntityAsync(int entityId);
 
         Task<T> GetEntityAsync(int entityId);
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Logging;
 using UniversityDomain.EntityInterfaces;
@@ -11,13 +12,13 @@ namespace BusinessLogic.DomainEntityValidation
 
         public EntityValidation(ILogger<EntityValidation> logger)
         {
-            _logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public void Validate<T>(T entity)
             where T : IEntity
         {
-            _ = entity ?? throw new System.ArgumentNullException(nameof(entity));
+            _ = entity ?? throw new ArgumentNullException(nameof(entity));
 
             var vc = new ValidationContext(entity);
             var vr = new List<ValidationResult>();

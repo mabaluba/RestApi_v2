@@ -58,12 +58,12 @@ namespace M10_RestApi
                 {
                     webBuilder.UseStartup<Startup>();
                 })
-                .ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.AddConsole();
-                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Warning);
-                })
+                // .ConfigureLogging(logging =>
+                // {
+                //     logging.ClearProviders();
+                //     logging.AddConsole();
+                //     logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Warning);
+                // })
                 .UseNLog();
     }
 }
