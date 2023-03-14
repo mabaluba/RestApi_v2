@@ -19,7 +19,7 @@ namespace BusinessLogic.Tests
         private Mock<IEntityRepositoryAsync<IAttendance>> _repositoryServiceAsync;
         private IControlService _controlService;
         private IEntityValidation _validation;
-        private IAttendance[] _attendances;
+        private Attendance[] _attendances;
 
         [OneTimeSetUp]
         public void Setup()
@@ -27,7 +27,7 @@ namespace BusinessLogic.Tests
             _repositoryServiceAsync = new Mock<IEntityRepositoryAsync<IAttendance>>();
             _controlService = new Mock<IControlService>().Object;
             _validation = new Mock<IEntityValidation>().Object;
-            _attendances = new DataForTests().AttandancesForTests;
+            _attendances = DataForTests.AttandancesForTests;
         }
 
         [OneTimeTearDown]
@@ -47,10 +47,10 @@ namespace BusinessLogic.Tests
 
             // Assert
             Assert.Multiple(() =>
-           {
-               Assert.ThrowsAsync<ArgumentNullException>(async () => await service.CreateEntityAsync(attendance));
-               Assert.ThrowsAsync<ArgumentNullException>(async () => await service.EditEntityAsync(attendance));
-           });
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(async () => await service.CreateEntityAsync(attendance));
+                Assert.ThrowsAsync<ArgumentNullException>(async () => await service.EditEntityAsync(attendance));
+            });
         }
 
         [Test]
@@ -184,19 +184,6 @@ namespace BusinessLogic.Tests
             Action deletionInvoked = () => _repositoryServiceAsync.Verify(i => i.DeleteEntityAsync(entityId), Times.Once);
             Assert.DoesNotThrowAsync(async () => await service.DeleteEntityAsync(entityId));
             Assert.That(deletionInvoked, Throws.Nothing);
-        }
-
-        [Test]
-        public void DeleteEntityAsync_GetEntity_ReturnSavedChangesEntity()
-        {
-            // Arrange
-            var entityId = It.IsAny<int>();
-            _repositoryServiceAsync.Setup(i => i.DeleteEntityAsync(entityId));
-            var service = new AttendanceService(_controlService, _validation, _repositoryServiceAsync.Object);
-
-            // Assert
-            Action deletionInvoked = () => _repositoryServiceAsync.Verify(i => i.DeleteEntityAsync(entityId), Times.Once);
-            Assert.DoesNotThrowAsync(async () => await service.DeleteEntityAsync(entityId));
         }
     }
 }

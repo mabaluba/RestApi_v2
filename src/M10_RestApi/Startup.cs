@@ -1,14 +1,12 @@
 using BusinessLogic;
 using BusinessLogic.NotivicationServices;
 using DataAccess;
-using AutoMapper;
 using FluentValidation.AspNetCore;
 using M10_RestApi.ExceptionMiddleware;
 using M10_RestApi.ModelsDto;
 using M10_RestApi.ModelsValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

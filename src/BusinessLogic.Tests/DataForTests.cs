@@ -2,12 +2,12 @@
 
 namespace BusinessLogic.Tests
 {
-    internal class DataForTests
+    internal static class DataForTests
     {
         private static readonly string _name = "name";
         private static readonly string _nameLast = "nameLast";
 
-        internal Attendance[] AttandancesForTests => new Attendance[]
+        internal static Attendance[] AttandancesForTests => new Attendance[]
         {
             new()
             {

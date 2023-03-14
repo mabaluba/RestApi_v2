@@ -45,9 +45,7 @@ namespace M10_RestApi.Tests.IntegrationTests
             response.EnsureSuccessStatusCode();
         }
 
-        [TestCase("0")]
         [TestCase("21")]
-        [TestCase("-6")]
         [TestCase("123")]
         public async Task GetAttendanceAsync_GivenNotValidId_ResponseNotFound(string id)
         {
@@ -58,8 +56,19 @@ namespace M10_RestApi.Tests.IntegrationTests
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
+        [TestCase("0")]
+        [TestCase("-6")]
+        public async Task GetAttendanceAsync_GivenNotValidId_ResponseBadRequest(string id)
+        {
+            // Act
+            var response = await _client.GetAsync(id);
+
+            // Assert
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+        }
+
         [TestCase("")]
-        public async Task GetAttendanceAsync_GivenEmpty_ResponseNotFound(string id)
+        public async Task GetAttendanceAsync_GivenEmpty_ResponseMethodNotAllowed(string id)
         {
             // Act
             var response = await _client.GetAsync(id);
@@ -127,7 +136,7 @@ namespace M10_RestApi.Tests.IntegrationTests
             response.EnsureSuccessStatusCode();
         }
 
-        [TestCaseSource(nameof(notValidAttendancesPost))]
+        [TestCaseSource(nameof(_notValidAttendancesPost))]
         public async Task CreateAttendanceAsync_GivenNotValidAttendanceDtoModel_ResponseNotFound(AttendancePostDto attendance)
         {
             // Arrang
@@ -165,7 +174,7 @@ namespace M10_RestApi.Tests.IntegrationTests
             response.EnsureSuccessStatusCode();
         }
 
-        [TestCaseSource(nameof(notValidAttendances))]
+        [TestCaseSource(nameof(_notValidAttendances))]
         public async Task EditAttendanceAsync_GivenNotValidInfo_ResponseNotFound(AttendanceDto attendance)
         {
             // Arrange
@@ -191,7 +200,6 @@ namespace M10_RestApi.Tests.IntegrationTests
             response.EnsureSuccessStatusCode();
         }
 
-        [TestCase("0")]
         [TestCase("21")]
         public async Task DeleteAttendanceAsync_GivenNotValidId_ResponseNotFound(string id)
         {
@@ -202,9 +210,19 @@ namespace M10_RestApi.Tests.IntegrationTests
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
-        private static AttendancePostDto[] notValidAttendancesPost = new[]
+        [TestCase("0")]
+        public async Task DeleteAttendanceAsync_GivenNotValidId_ResponseBadRequest(string id)
         {
-            new AttendancePostDto
+            // Act
+            var response = await _client.DeleteAsync(id);
+
+            // Assert
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+        }
+
+        private static AttendancePostDto[] _notValidAttendancesPost =
+        {
+            new()
             {
                 LectureTopic = "Not Valid",
                 StudentFirstName = "Janet",
@@ -212,7 +230,7 @@ namespace M10_RestApi.Tests.IntegrationTests
                 IsAttended = true,
                 HomeworkMark = 5
             },
-            new AttendancePostDto
+            new()
             {
                 LectureTopic = "Hydraulics",
                 StudentFirstName = "Not Valid",
@@ -220,7 +238,7 @@ namespace M10_RestApi.Tests.IntegrationTests
                 IsAttended = true,
                 HomeworkMark = 5
             },
-            new AttendancePostDto
+            new()
             {
                 LectureTopic = "Hydraulics",
                 StudentFirstName = "Janet",
@@ -230,9 +248,9 @@ namespace M10_RestApi.Tests.IntegrationTests
             },
         };
 
-        private static AttendanceDto[] notValidAttendances = new[]
+        private static AttendanceDto[] _notValidAttendances =
         {
-            new AttendanceDto
+            new()
             {
                 Id = 15,
                 LectureTopic = "Not Valid",
@@ -241,7 +259,7 @@ namespace M10_RestApi.Tests.IntegrationTests
                 IsAttended = true,
                 HomeworkMark = 5
             },
-            new AttendanceDto
+            new()
             {
                 Id = 15,
                 LectureTopic = "Hydraulics",
@@ -250,7 +268,7 @@ namespace M10_RestApi.Tests.IntegrationTests
                 IsAttended = true,
                 HomeworkMark = 5
             },
-            new AttendanceDto
+            new()
             {
                 Id = 15,
                 LectureTopic = "Hydraulics",
